@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduQuiz - Home</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #0D6EFD; /* Bright Blue */
+            --secondary-color: #198754; /* Happy Green */
+            --accent-color: #FFC107; /* Sunny Yellow */
+            --danger-color: #DC3545; /* Clear Red */
+            --dark-color: #212529; /* Dark Blue */
+            --light-color: #F8F9FA; /* Warm Light Gray */
+            --white: #ffffff;
+            --shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            --border-radius: 20px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Fredoka', sans-serif;
+            background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--dark-color);
+            overflow: hidden;
+        }
+
+        /* Animated Background */
+        #stars-container, #clouds-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        .star, .cloud, .rocket {
+            position: absolute;
+            font-size: 2rem;
+            animation: twinkle 3s infinite ease-in-out;
+        }
+        .cloud { font-size: 3rem; opacity: 0.5; animation: drift 25s infinite linear; }
+        .rocket { font-size: 2.5rem; animation: fly 15s infinite linear; }
+        @keyframes twinkle { 0%, 100% { opacity: 0.2; transform: scale(1); } 50% { opacity: 1; transform: scale(1.2); } }
+        @keyframes drift { from { transform: translateX(-100px); } to { transform: translateX(calc(100vw + 100px)); } }
+        @keyframes fly { from { transform: translateY(100vh) translateX(-50px) rotate(-45deg); } to { transform: translateY(-100px) translateX(100vw) rotate(-45deg); } }
+
+        .container {
+            width: 90%;
+            max-width: 800px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            border: 3px solid var(--white);
+            z-index: 10;
+        }
+
+        header {
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            color: var(--white);
+            padding: 2.5rem;
+            text-align: center;
+            font-size: 3rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+            animation: wobble 7s ease-in-out infinite;
+        }
+        @keyframes wobble { 0%, 100% { transform: rotate(-2deg); } 50% { transform: rotate(2deg); } }
+
+        main {
+            padding: 3rem;
+            text-align: center;
+        }
+
+        .home-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 1.5rem 3rem;
+            font-size: 1.8rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            color: var(--white);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            margin: 0 auto;
+            width: 80%;
+            max-width: 400px;
+        }
+        .btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        .btn-play { background: linear-gradient(45deg, var(--secondary-color), #20c997); }
+        .btn-play:not(:disabled):hover { transform: scale(1.1) rotate(3deg); box-shadow: 0 6px 20px rgba(25, 135, 84, 0.4); }
+        .btn-settings { background: linear-gradient(45deg, var(--accent-color), #fd7e14); }
+        .btn-settings:hover { transform: scale(1.1) rotate(-3deg); box-shadow: 0 6px 20px rgba(255, 193, 7, 0.4); }
+
+        .home-status {
+            margin-top: 2rem;
+            font-size: 1.2rem;
+            color: var(--danger-color);
+            min-height: 30px;
+            animation: fadeIn 1s;
+        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    </style>
+</head>
+<body>
+
+    <div id="stars-container"></div>
+    <div id="clouds-container"></div>
+
+    <div class="container">
+        <header>🚀 EduQuiz - The Fun Classroom Game 🚀</header>
+        <main>
+            <div class="home-buttons">
+                <button id="play-quiz-btn" class="btn btn-play" onclick="navigateTo('playquiz.html')">
+                    <span>🏁</span> Play Quiz
+                </button>
+                <button class="btn btn-settings" onclick="navigateTo('quizsettings.html')">
+                    <span>⚙️</span> Quiz Settings
+                </button>
+            </div>
+            <p id="home-status" class="home-status"></p>
+        </main>
+    </div>
+
+    <script src="dummy-data.js"></script>
+
+<script>
+    const playQuizBtn = document.getElementById('play-quiz-btn');
+    const homeStatus = document.getElementById('home-status');
+    // ... (kode animasi background biarkan saja) ...
+    function generateBackgroundElements() { /* ... kode lama ... */ }
+
+    function updateHomeScreen() {
+        // Panggil fungsi inisialisasi data demo
+        initDemoData();
+
+        // AMBIL DARI LOCALSTORAGE (Bukan Server)
+        const questions = JSON.parse(localStorage.getItem('eduQuizQuestions') || '[]');
+
+        if (questions.length === 0) {
+            playQuizBtn.disabled = true;
+            homeStatus.textContent = "⚠️ Menunggu data demo...";
+        } else {
+            playQuizBtn.disabled = false;
+            homeStatus.textContent = `✅ Ready! Demo Mode: ${questions.length} question(s) loaded.`;
+        }
+    }
+
+    function navigateTo(page) {
+        window.location.href = page;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // generateBackgroundElements(); // uncomment jika ada fungsinya
+        updateHomeScreen();
+    });
+</script>
+</body>
+</html>
