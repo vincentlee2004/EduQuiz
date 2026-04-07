@@ -3,264 +3,228 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EduQuiz - Quiz Settings</title>
+    <title>EduQuiz - Pro Settings</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* (Copy-paste all styles from the previous version's settings screen here) */
         :root {
             --primary-color: #0D6EFD; --secondary-color: #198754; --accent-color: #FFC107;
             --danger-color: #DC3545; --dark-color: #212529; --light-color: #F8F9FA;
             --white: #ffffff; --shadow: 0 8px 25px rgba(0, 0, 0, 0.15); --border-radius: 20px;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Fredoka', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 2rem; }
-        .container { max-width: 1000px; margin: auto; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); border-radius: var(--border-radius); box-shadow: var(--shadow); overflow: hidden; }
+        body { font-family: 'Fredoka', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 2rem; color: var(--dark-color); }
+        .container { max-width: 1100px; margin: auto; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: var(--border-radius); box-shadow: var(--shadow); overflow: hidden; }
         header { background: linear-gradient(90deg, var(--primary-color), var(--accent-color)); color: var(--white); padding: 1.5rem; text-align: center; font-size: 2.5rem; font-weight: 700; }
         main { padding: 2rem; }
+        
         .settings-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
-        .settings-header h2 { color: var(--primary-color); font-size: 2rem; }
-        .btn { padding: 0.8rem 1.5rem; font-size: 1rem; font-weight: 600; border: none; border-radius: 50px; cursor: pointer; transition: all 0.3s; color: var(--white); box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        .btn { padding: 0.8rem 1.5rem; font-size: 1rem; font-weight: 600; border: none; border-radius: 50px; cursor: pointer; transition: 0.3s; color: var(--white); display: flex; align-items: center; gap: 8px; }
         .btn-back { background: var(--dark-color); }
-        .btn-back:hover { background: #343a40; transform: scale(1.05); }
-        .btn-edit { background: var(--primary-color); }
-        .btn-delete { background: var(--danger-color); }
-        .btn-save { background: var(--secondary-color); width: 100%; padding: 1rem; font-size: 1.2rem; }
-        .btn-save:hover { background: #157347; }
-        .question-list { margin-bottom: 2rem; }
-        .question-list h3 { margin-bottom: 1rem; color: var(--dark-color); }
-        .question-item { background: var(--light-color); padding: 1rem; border-radius: 15px; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; border-left: 5px solid var(--primary-color); }
-        .question-item-content { display: flex; align-items: center; gap: 1rem; }
-        .question-item-content p { font-weight: 500; }
-        .question-item-previews img { width: 40px; height: 40px; object-fit: cover; border-radius: 8px; border: 2px solid #ddd; }
-        .question-item-actions { display: flex; gap: 0.5rem; }
-        .add-question-form { background: #f8f9fa; padding: 2rem; border-radius: var(--border-radius); border: 2px dashed var(--accent-color); }
+        .btn-save { background: var(--secondary-color); width: 100%; padding: 1.2rem; font-size: 1.3rem; margin-top: 2rem; justify-content: center; }
+        .btn-edit { background: var(--primary-color); padding: 0.5rem 1rem; }
+        .btn-delete { background: var(--danger-color); padding: 0.5rem 1rem; }
+
+        .question-list { margin-bottom: 3rem; background: var(--white); padding: 1.5rem; border-radius: 15px; }
+        .question-item { background: var(--light-color); padding: 1rem; border-radius: 12px; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; border-left: 6px solid var(--primary-color); }
+
+        .add-question-form { background: #fff; padding: 2rem; border-radius: var(--border-radius); border: 3px dashed var(--accent-color); }
+        .section-title { margin-bottom: 1.5rem; color: var(--primary-color); border-bottom: 2px solid #eee; padding-bottom: 5px; }
+        
         .form-group { margin-bottom: 1.5rem; }
-        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; }
-        .form-group input[type="file"], .form-group select { width: 100%; padding: 0.8rem; border: 2px solid #ccc; border-radius: 10px; font-family: 'Fredoka', sans-serif; }
-        .answer-options-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
-        .answer-option { background: var(--white); padding: 1rem; border-radius: 15px; border: 1px solid #ddd; text-align: center; }
-        .answer-option img { max-width: 100%; height: 100px; object-fit: cover; border-radius: 10px; margin-bottom: 0.5rem; background: #e9ecef; }
+        label { display: block; margin-bottom: 0.6rem; font-weight: 600; font-size: 1.1rem; }
+        input[type="text"], input[type="number"], select, input[type="file"] { width: 100%; padding: 0.8rem; border: 2px solid #ddd; border-radius: 12px; font-family: inherit; font-size: 1rem; }
+        
+        .media-toggle { display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+        .media-btn { padding: 5px 12px; border: 1px solid #ccc; border-radius: 20px; font-size: 0.8rem; cursor: pointer; background: #eee; }
+        .media-btn.active { background: var(--primary-color); color: white; border-color: var(--primary-color); }
+
+        .answer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1rem; }
+        .answer-card { background: var(--light-color); padding: 1.5rem; border-radius: 15px; border: 1px solid #ddd; position: relative; }
+        .answer-card.correct-selected { border: 3px solid var(--secondary-color); background: #eafff5; }
+        
+        .preview-box { width: 100%; height: 120px; background: #e9ecef; border-radius: 10px; margin: 10px 0; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .preview-box img { width: 100%; height: 100%; object-fit: cover; }
     </style>
 </head>
 <body>
     <div class="container">
-        <header>🛠️ Quiz Settings</header>
+        <header>⚙️ EduQuiz Editor</header>
         <main>
             <div class="settings-header">
-                <h2>Manage Your Questions</h2>
-                <button class="btn btn-back" onclick="window.location.href='index.html'">👈 Back to Home</button>
+                <h2>Manage Questions</h2>
+                <button class="btn btn-back" onclick="window.location.href='index.html'">🏠 Back Home</button>
             </div>
-            
-            <div class="question-list" id="question-list">
-                <h3>Existing Questions</h3>
-            </div>
+
+            <div class="question-list" id="q-list"></div>
 
             <div class="add-question-form">
-                <h3 id="form-title">Add New Question</h3>
-                <form id="add-question-form">
-                    <input type="hidden" id="edit-index" value="-1">
+                <h3 id="form-title" class="section-title">Tambah Soal Baru</h3>
+                <form id="quiz-form">
+                    <input type="hidden" id="edit-idx" value="-1">
                     
                     <div class="form-group">
-                        <label for="audio-upload">🎵 Upload Audio for Question:</label>
-                        <input type="file" id="audio-upload" accept="audio/*" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="choice-count">🔢 Number of Choices:</label>
-                        <select id="choice-count" onchange="generateAnswerInputs()">
-                            <option value="2">2 Choices (A, B)</option>
-                            <option value="3">3 Choices (A, B, C)</option>
-                            <option value="4" selected>4 Choices (A, B, C, D)</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label>🖼️ Answer Options (Images):</label>
-                        <div id="answer-options-container" class="answer-options-container">
-                            <!-- Dynamically generated -->
+                        <label>📝 Teks Soal (Wajib):</label>
+                        <input type="text" id="q-text" required placeholder="Contoh: Apa nama hewan ini?">
+                        
+                        <div class="media-toggle" style="margin-top:10px;">
+                            <span>Gunakan media tambahan? </span>
+                            <button type="button" class="media-btn" id="q-btn-img" onclick="toggleMedia('q', 'img')">🖼️ Gambar</button>
+                            <button type="button" class="media-btn" id="q-btn-aud" onclick="toggleMedia('q', 'aud')">🎵 Audio</button>
                         </div>
+                        
+                        <input type="file" id="q-img" accept="image/*" style="display:none; margin-top:5px;">
+                        <input type="file" id="q-aud" accept="audio/*" style="display:none; margin-top:5px;">
                     </div>
 
-                    <button type="submit" class="btn btn-save">💾 Save Question</button>
+                    <div class="form-group">
+                        <label>🔢 Jumlah Pilihan Jawaban (Custom):</label>
+                        <input type="number" id="ans-count" value="4" min="2" onchange="renderAnswerCards()">
+                    </div>
+
+                    <h3 class="section-title">Pilihan Jawaban</h3>
+                    <div id="answers-container" class="answer-grid"></div>
+
+                    <button type="submit" class="btn btn-save">💾 Simpan Soal</button>
                 </form>
             </div>
         </main>
     </div>
 
     <script>
-        let questions = [];
-        const API_URL = '/api/questions'; // URL Backend kita
+        let questions = JSON.parse(localStorage.getItem('eduQuizQuestions') || '[]');
+        let qMedia = { img: false, aud: false };
 
-        const questionList = document.getElementById('question-list');
-        const addQuestionForm = document.getElementById('add-question-form');
-        const answerOptionsContainer = document.getElementById('answer-options-container');
-        const formTitle = document.getElementById('form-title');
-        const audioInput = document.getElementById('audio-upload');
-
-        document.addEventListener('DOMContentLoaded', () => {
-            loadQuestions();
-            audioInput.removeAttribute('required');
-        });
-
-        addQuestionForm.addEventListener('submit', handleFormSubmit);
-
-        function loadQuestions() { 
-            questions = JSON.parse(localStorage.getItem('eduQuizQuestions') || '[]'); 
-            renderQuestionList();
+        function toggleMedia(prefix, type, idx = null) {
+            const btn = idx !== null ? document.getElementById(`${prefix}-btn-${type}-${idx}`) : document.getElementById(`${prefix}-btn-${type}`);
+            const input = idx !== null ? document.getElementById(`${prefix}-${type}-${idx}`) : document.getElementById(`${prefix}-${type}`);
+            
+            const isActive = btn.classList.toggle('active');
+            input.style.display = isActive ? 'block' : 'none';
         }
 
-        // --- LOGIKA RENDER TAMPILAN (SAMA SEPERTI SEBELUMNYA) ---
-        function renderQuestionList() {
-            questionList.innerHTML = '<h3>Existing Questions (SQLite DB)</h3>';
-            if (questions.length === 0) { questionList.innerHTML += '<p>No questions yet in Database.</p>'; return; }
-            
-            questions.forEach((q, index) => {
-                const previews = q.answers.map(a => `<img src="${a.image}" alt="option">`).join('');
-                const questionItem = document.createElement('div');
-                questionItem.className = 'question-item';
-                questionItem.innerHTML = `
-                    <div class="question-item-content">
-                        <div>
-                            <p style="font-weight:bold;">🎵 Q${index + 1}: ${q.audioName}</p>
-                            <div class="question-item-previews" style="margin-top:5px;">${previews}</div>
-                        </div>
-                    </div>
-                    <div class="question-item-actions">
-                        <button class="btn btn-edit" type="button" onclick="editQuestion(${index})">✏️ Edit</button>
-                        <button class="btn btn-delete" type="button" onclick="deleteQuestion(${q.id})">🗑️ Delete</button>
-                    </div>
-                `;
-                questionList.appendChild(questionItem);
-            });
-        }
+        function renderAnswerCards(existing = null) {
+            const count = parseInt(document.getElementById('ans-count').value) || 2;
+            const container = document.getElementById('answers-container');
+            container.innerHTML = '';
 
-        function generateAnswerInputs(existingAnswers = null) {
-            const count = parseInt(document.getElementById('choice-count').value);
-            answerOptionsContainer.innerHTML = '';
-            
             for (let i = 0; i < count; i++) {
-                const previewSrc = existingAnswers && existingAnswers[i] 
-                    ? existingAnswers[i].image 
-                    : `https://via.placeholder.com/150x150.png?text=Image+${String.fromCharCode(65+i)}`;
+                const data = existing ? existing[i] : null;
+                const div = document.createElement('div');
+                div.className = 'answer-card';
+                div.innerHTML = `
+                    <label>Pilihan ${String.fromCharCode(65+i)}:</label>
+                    <input type="text" class="ans-text" required placeholder="Teks jawaban..." value="${data?.text || ''}">
+                    
+                    <div class="media-toggle" style="margin-top:10px;">
+                        <button type="button" class="media-btn ${data?.useImg ? 'active' : ''}" id="a-btn-img-${i}" onclick="toggleMedia('a', 'img', ${i})">🖼️</button>
+                        <button type="button" class="media-btn ${data?.useAud ? 'active' : ''}" id="a-btn-aud-${i}" onclick="toggleMedia('a', 'aud', ${i})">🎵</button>
+                        <label style="display:inline; margin-left:10px; font-size:0.8rem;">
+                            <input type="radio" name="is-correct" value="${i}" ${data?.isCorrect ? 'checked' : ''} required> Benar
+                        </label>
+                    </div>
 
-                const optionDiv = document.createElement('div');
-                optionDiv.className = 'answer-option';
-                optionDiv.innerHTML = `
-                    <img id="preview-${i}" src="${previewSrc}" alt="Preview" style="display:block; margin: 0 auto 10px;">
-                    <p>Choice ${String.fromCharCode(65 + i)}</p>
-                    <input type="file" accept="image/*" data-index="${i}" class="image-upload" onchange="previewImage(this, ${i})">
-                    <label style="display:block; margin-top:10px; cursor:pointer;">
-                        <input type="radio" name="correct-answer" value="${i}" required> Correct Answer
-                    </label>
+                    <input type="file" id="a-img-${i}" accept="image/*" style="display:${data?.useImg ? 'block' : 'none'}; margin-top:5px;">
+                    <input type="file" id="a-aud-${i}" accept="audio/*" style="display:${data?.useAud ? 'block' : 'none'}; margin-top:5px;">
                 `;
-                answerOptionsContainer.appendChild(optionDiv);
+                container.appendChild(div);
             }
         }
 
-        function previewImage(input, index) {
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) { document.getElementById(`preview-${index}`).src = e.target.result; }
-                reader.readAsDataURL(input.files[0]);
-            }
+        async function toBase64(file) {
+            return new Promise((res) => {
+                const r = new FileReader(); r.readAsDataURL(file);
+                r.onload = () => res(r.result);
+            });
         }
 
-        // --- GANTI LOGIKA SAVE DATA KE SERVER ---
-        async function handleFormSubmit(event) {
-            event.preventDefault();
-            const editIndex = parseInt(document.getElementById('edit-index').value);
-            const audioFile = document.getElementById('audio-upload').files[0];
-            const imageUploads = document.querySelectorAll('.image-upload');
-            const correctAnswerInput = document.querySelector('input[name="correct-answer"]:checked');
-
-            if (editIndex === -1 && !audioFile) { alert('Please upload audio!'); return; }
-            if (!correctAnswerInput) { alert('Select correct answer!'); return; }
+        document.getElementById('quiz-form').onsubmit = async (e) => {
+            e.preventDefault();
+            const editIdx = parseInt(document.getElementById('edit-idx').value);
             
-            const correctAnswer = correctAnswerInput.value;
-            let audioBase64 = '';
-            let audioName = '';
+            // Proses Soal
+            const qObj = {
+                text: document.getElementById('q-text').value,
+                useImg: document.getElementById('q-btn-img').classList.contains('active'),
+                useAud: document.getElementById('q-btn-aud').classList.contains('active'),
+                img: "", aud: ""
+            };
 
-            if (audioFile) {
-                audioBase64 = await fileToBase64(audioFile);
-                audioName = audioFile.name;
-            } else if (editIndex > -1) {
-                audioBase64 = questions[editIndex].audio;
-                audioName = questions[editIndex].audioName;
+            if(qObj.useImg) {
+                const f = document.getElementById('q-img').files[0];
+                qObj.img = f ? await toBase64(f) : (editIdx > -1 ? questions[editIdx].qData.img : "");
+            }
+            if(qObj.useAud) {
+                const f = document.getElementById('q-aud').files[0];
+                qObj.aud = f ? await toBase64(f) : (editIdx > -1 ? questions[editIdx].qData.aud : "");
             }
 
+            // Proses Jawaban
             const answers = [];
-            for (let i = 0; i < imageUploads.length; i++) {
-                const file = imageUploads[i].files[0];
-                let imageBase64 = '';
-                if (file) {
-                    imageBase64 = await fileToBase64(file);
-                } else if (editIndex > -1 && questions[editIndex].answers[i]) {
-                    imageBase64 = questions[editIndex].answers[i].image;
-                } else {
-                    alert(`Upload image for Choice ${String.fromCharCode(65 + i)}`); return;
+            const cards = document.querySelectorAll('.answer-card');
+            const correctIdx = document.querySelector('input[name="is-correct"]:checked').value;
+
+            for(let i=0; i<cards.length; i++) {
+                const useImg = document.getElementById(`a-btn-img-${i}`).classList.contains('active');
+                const useAud = document.getElementById(`a-btn-aud-${i}`).classList.contains('active');
+                
+                let imgData = "";
+                let audData = "";
+
+                if(useImg) {
+                    const f = document.getElementById(`a-img-${i}`).files[0];
+                    imgData = f ? await toBase64(f) : (editIdx > -1 && questions[editIdx].answers[i] ? questions[editIdx].answers[i].img : "");
                 }
-                answers.push({ image: imageBase64, isCorrect: i === parseInt(correctAnswer) });
+                if(useAud) {
+                    const f = document.getElementById(`a-aud-${i}`).files[0];
+                    audData = f ? await toBase64(f) : (editIdx > -1 && questions[editIdx].answers[i] ? questions[editIdx].answers[i].aud : "");
+                }
+
+                answers.push({
+                    text: cards[i].querySelector('.ans-text').value,
+                    useImg, useAud, img: imgData, aud: audData,
+                    isCorrect: i == correctIdx
+                });
             }
 
-            const questionData = { id: Date.now(), audio: audioBase64, audioName, answers };
+            const payload = { id: Date.now(), qData: qObj, answers };
+            if(editIdx > -1) questions[editIdx] = payload;
+            else questions.push(payload);
 
-    if (editIndex > -1) { 
-        questions[editIndex] = questionData; 
-    } else { 
-        questions.push(questionData); 
-    }
+            localStorage.setItem('eduQuizQuestions', JSON.stringify(questions));
+            location.reload();
+        };
 
-    // SIMPAN KE LOCAL STORAGE
-    localStorage.setItem('eduQuizQuestions', JSON.stringify(questions));
-    
-    renderQuestionList();
-    resetForm();
-    alert('Saved to Browser Storage (Demo Mode)!');
-}
-        
-        function fileToBase64(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = () => resolve(reader.result);
-                reader.onerror = error => reject(error);
+        function renderList() {
+            const list = document.getElementById('q-list');
+            list.innerHTML = '<h3>Daftar Soal Tersimpan</h3>';
+            if(questions.length === 0) list.innerHTML += '<p>Belum ada soal.</p>';
+            questions.forEach((q, i) => {
+                const div = document.createElement('div');
+                div.className = 'question-item';
+                div.innerHTML = `<span><b>${i+1}.</b> ${q.qData.text}</span>
+                <div><button class="btn btn-edit" onclick="editQ(${i})">✏️</button>
+                <button class="btn btn-delete" onclick="delQ(${i})">🗑️</button></div>`;
+                list.appendChild(div);
             });
         }
 
-        function deleteQuestion(index) {
-    if (confirm('Delete this question?')) {
-        questions.splice(index, 1);
-        localStorage.setItem('eduQuizQuestions', JSON.stringify(questions));
-        renderQuestionList();
-    }
-}
-
-        function editQuestion(index) {
-            const q = questions[index];
-            document.getElementById('edit-index').value = index;
-            formTitle.textContent = `Edit Question (ID: ${q.id})`;
-            document.getElementById('choice-count').value = q.answers.length;
-            
-            generateAnswerInputs(q.answers); // Kirim data lama untuk preview
-
-            q.answers.forEach((ans, i) => {
-                if (ans.isCorrect) {
-                    const radio = document.querySelector(`input[name="correct-answer"][value="${i}"]`);
-                    if(radio) radio.checked = true;
-                }
-            });
-            addQuestionForm.scrollIntoView({ behavior: 'smooth' });
+        function editQ(i) {
+            const q = questions[i];
+            document.getElementById('edit-idx').value = i;
+            document.getElementById('q-text').value = q.qData.text;
+            if(q.qData.useImg) toggleMedia('q', 'img');
+            if(q.qData.useAud) toggleMedia('q', 'aud');
+            document.getElementById('ans-count').value = q.answers.length;
+            renderAnswerCards(q.answers);
+            document.getElementById('form-title').innerText = "Edit Soal " + (i+1);
+            window.scrollTo(0, document.body.scrollHeight);
         }
-        
-        function resetForm() {
-            addQuestionForm.reset();
-            document.getElementById('edit-index').value = -1;
-            formTitle.textContent = 'Add New Question';
-            document.getElementById('choice-count').value = "4";
-            generateAnswerInputs();
-        }
+
+        function delQ(i) { if(confirm("Hapus soal ini?")) { questions.splice(i,1); localStorage.setItem('eduQuizQuestions', JSON.stringify(questions)); renderList(); } }
+
+        window.onload = () => { renderList(); renderAnswerCards(); };
     </script>
 </body>
 </html>

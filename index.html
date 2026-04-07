@@ -163,20 +163,18 @@
     function generateBackgroundElements() { /* ... kode lama ... */ }
 
     function updateHomeScreen() {
-        // Panggil fungsi inisialisasi data demo
-        initDemoData();
+    const questions = JSON.parse(localStorage.getItem('eduQuizQuestions') || '[]');
 
-        // AMBIL DARI LOCALSTORAGE (Bukan Server)
-        const questions = JSON.parse(localStorage.getItem('eduQuizQuestions') || '[]');
-
-        if (questions.length === 0) {
-            playQuizBtn.disabled = true;
-            homeStatus.textContent = "⚠️ Menunggu data demo...";
-        } else {
-            playQuizBtn.disabled = false;
-            homeStatus.textContent = `✅ Ready! Demo Mode: ${questions.length} question(s) loaded.`;
-        }
+    if (questions.length === 0) {
+        playQuizBtn.disabled = true;
+        homeStatus.textContent = "⚠️ Belum ada soal. Silakan buat soal di Quiz Settings.";
+        homeStatus.style.color = "var(--danger-color)";
+    } else {
+        playQuizBtn.disabled = false;
+        homeStatus.textContent = `✅ Siap main! Ada ${questions.length} soal tersedia.`;
+        homeStatus.style.color = "var(--secondary-color)";
     }
+}
 
     function navigateTo(page) {
         window.location.href = page;

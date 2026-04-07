@@ -162,44 +162,44 @@
         }
 
         function displayQuestion() {
-            if (currentQuestionIndex >= questions.length) {
-                showResults();
-                return;
-            }
-            const question = questions[currentQuestionIndex];
-            questionCounter.textContent = `Question ${currentQuestionIndex + 1} of ${questions.length}`;
-            const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
-            progressBar.style.width = `${progress}%`;
-            
-            // Set Audio Source
-            audioPlayer.src = question.audio;
-            audioPlayer.load();
-            
-            // Coba putar audio secara otomatis dengan penanganan error (Safe Play)
-            const playPromise = audioPlayer.play();
-            if (playPromise !== undefined) {
-                playPromise.catch(error => {
-                    console.log("Autoplay dicegah oleh browser. User perlu klik play manual.");
-                    // Tidak perlu alert, user tinggal klik tombol play di audio control
-                });
-            }
+    if (currentQuestionIndex >= questions.length) {
+        showResults();
+        return;
+    }
+    const question = questions[currentQuestionIndex];
+    questionCounter.textContent = `Question ${currentQuestionIndex + 1} of ${questions.length}`;
+    
+    // RENDER SOAL
+    const qContainer = document.querySelector('.question-container');
+    qContainer.innerHTML = `
+        <h1 style="font-size: 2.2rem; margin-bottom: 15px;">${question.qData.text}</h1>
+        ${question.qData.useImg ? `<img src="${question.qData.img}" style="max-width:300px; border-radius:15px; margin-bottom:10px;">` : ''}
+        ${question.qData.useAud ? `<div class="audio-player"><audio src="${question.qData.aud}" controls autoplay></audio></div>` : ''}
+    `;
 
-            // Render Jawaban
-            answersGrid.innerHTML = '';
-            answersGrid.style.gridTemplateColumns = `repeat(${question.answers.length > 2 ? 2 : question.answers.length}, 1fr)`;
+    // RENDER JAWABAN
+    answersGrid.innerHTML = '';
+    // Atur grid kolom sesuai jumlah jawaban (max 2 kolom)
+    answersGrid.style.gridTemplateColumns = `repeat(${question.answers.length > 2 ? 2 : 1}, 1fr)`;
 
-            question.answers.forEach((answer, index) => {
-                const card = document.createElement('div');
-                card.className = 'answer-card';
-                card.dataset.index = index;
-                card.innerHTML = `
-                    <img src="${answer.image}" alt="Option ${index}">
-                    <div class="answer-label">${String.fromCharCode(65 + index)}</div>
-                `;
-                card.addEventListener('click', () => checkAnswer(index));
-                answersGrid.appendChild(card);
-            });
-        }
+    question.answers.forEach((ans, index) => {
+        const card = document.createElement('div');
+        card.className = 'answer-card';
+        card.style.display = 'flex';
+        card.style.flexDirection = 'column';
+        card.style.alignItems = 'center';
+        card.style.padding = '15px';
+
+        card.innerHTML = `
+            ${ans.useImg ? `<img src="${ans.img}" style="width:100%; height:150px; object-fit:cover; border-radius:10px; margin-bottom:10px;">` : ''}
+            <p style="font-size: 1.5rem; font-weight: bold;">${ans.text}</p>
+            ${ans.useAud ? `<button onclick="event.stopPropagation(); new Audio('${ans.aud}').play()" style="margin-top:5px; cursor:pointer;">🔊 Play Sound</button>` : ''}
+            <div class="answer-label">${String.fromCharCode(65 + index)}</div>
+        `;
+        card.onclick = () => checkAnswer(index);
+        answersGrid.appendChild(card);
+    });
+}
 
         function checkAnswer(selectedIndex) {
             const question = questions[currentQuestionIndex];
@@ -256,4 +256,3 @@
     </script>
 </body>
 </html>
-```
