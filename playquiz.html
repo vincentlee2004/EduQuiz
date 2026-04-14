@@ -19,60 +19,47 @@
         header { background: linear-gradient(90deg, var(--primary-color), var(--accent-color)); color: var(--white); padding: 1.5rem; text-align: center; font-size: 2.5rem; font-weight: 700; }
         main { padding: 2rem; min-height: 500px; position: relative; }
         
-        /* Styles untuk Overlay Start */
-        .start-overlay {
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            height: 100%; min-height: 400px; text-align: center;
-        }
-        .start-overlay h3 { font-size: 2.5rem; color: var(--primary-color); margin-bottom: 1rem; }
-        .start-overlay p { font-size: 1.2rem; margin-bottom: 2rem; color: #555; }
-
+        .start-overlay { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; min-height: 400px; text-align: center; }
         .game-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
-        .game-header h2 { color: var(--dark-color); font-size: 1.5rem; }
         .score-display { font-size: 1.8rem; font-weight: 700; color: var(--primary-color); display: flex; align-items: center; gap: 0.5rem; }
-        .score-display.score-pop { animation: scorePop 0.5s ease-out; }
-        @keyframes scorePop { 0% { transform: scale(1); } 50% { transform: scale(1.3); } 100% { transform: scale(1); } }
+        
         .progress-bar-container { width: 100%; height: 25px; background-color: var(--light-color); border-radius: 50px; overflow: hidden; margin-bottom: 2rem; border: 2px solid #ddd; }
-        .progress-bar { height: 100%; background: linear-gradient(90deg, var(--secondary-color), var(--accent-color)); width: 0%; transition: width 0.5s ease-in-out; border-radius: 50px; }
-        .question-container { text-align: center; margin-bottom: 2rem; }
-        .audio-player { margin: 1rem auto; width: 100%; max-width: 500px; }
-        .audio-player audio { width: 100%; border-radius: 10px; }
-        .answers-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; margin-top: 2rem; }
-        .answer-card { aspect-ratio: 1 / 1; border-radius: var(--border-radius); overflow: hidden; cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease; border: 5px solid transparent; position: relative; background: #fff; }
-        .answer-card:hover:not(.correct):not(.incorrect) { transform: scale(1.05); box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
-        .answer-card img { width: 100%; height: 100%; object-fit: cover; }
-        .answer-label { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.7); color: white; font-size: 2rem; font-weight: bold; width: 50px; height: 50px; display: flex; justify-content: center; align-items: center; border-radius: 50%; }
+        .progress-bar { height: 100%; background: linear-gradient(90deg, var(--secondary-color), var(--accent-color)); width: 0%; transition: width 0.5s; border-radius: 50px; }
+        
+        .answers-grid { display: grid; gap: 1.5rem; margin-top: 2rem; }
+        .answer-card { border-radius: var(--border-radius); overflow: hidden; cursor: pointer; transition: 0.3s; border: 5px solid transparent; position: relative; background: #fff; text-align: center; padding: 15px; }
+        .answer-card:hover { transform: scale(1.02); box-shadow: var(--shadow); }
         .answer-card.correct { border-color: var(--secondary-color); animation: pulse 0.6s; }
         .answer-card.incorrect { border-color: var(--danger-color); animation: shake 0.5s; }
-        @keyframes pulse { 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(25, 135, 84, 0.7); } 70% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(25, 135, 84, 0); } 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(25, 135, 84, 0); } }
-        @keyframes shake { 0%, 100% { transform: translateX(0); } 10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); } 20%, 40%, 60%, 80% { transform: translateX(10px); } }
-        .results-container { text-align: center; padding: 3rem; }
-        .results-container h2 { font-size: 3rem; color: var(--primary-color); margin-bottom: 1rem; }
-        .final-score { font-size: 2.5rem; margin-bottom: 2rem; }
-        .btn { padding: 1.2rem 2.5rem; font-size: 1.5rem; font-weight: 600; border: none; border-radius: 50px; cursor: pointer; transition: all 0.3s; color: var(--white); box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        
+        .answer-label { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.7); color: white; font-size: 1.5rem; font-weight: bold; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; border-radius: 50%; }
+        
+        .btn { padding: 1.2rem 2.5rem; font-size: 1.5rem; font-weight: 600; border: none; border-radius: 50px; cursor: pointer; transition: 0.3s; color: var(--white); box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
         .btn-play { background: linear-gradient(45deg, var(--secondary-color), #20c997); }
-        .btn-play:hover { transform: scale(1.1); }
         .btn-restart { background: linear-gradient(45deg, var(--primary-color), var(--accent-color)); }
-        .btn-restart:hover { transform: scale(1.1); }
-        .confetti-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; z-index: 9999; }
-        .confetti { position: absolute; top: -10%; animation: confetti-fall 3s linear forwards; }
-        @keyframes confetti-fall { to { transform: translateY(110vh) rotate(360deg); } }
+
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-10px); } 40%, 80% { transform: translateX(10px); } }
+        
+        .confetti-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 999; }
+        .confetti { position: absolute; top: -10%; animation: fall 3s linear forwards; }
+        @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
     </style>
 </head>
 <body>
     <div class="container">
-        <header>🎮 EduQuiz - Let's Play! 🎮</header>
+        <header>🎮 EduQuiz - Time to Play! 🎮</header>
         <main>
             <div id="start-overlay" class="start-overlay">
-                <h3>Ready for the Challenge?</h3>
-                <p>Click the button below to start the audio quiz!</p>
-                <button class="btn btn-play" onclick="initGame()">▶️ START GAME</button>
+                <h3 style="font-size: 2.5rem; color: var(--primary-color); margin-bottom: 1rem;">Sudah Siap?</h3>
+                <p style="margin-bottom: 2rem; font-size: 1.2rem;">Klik tombol di bawah untuk mulai kuis!</p>
+                <button id="btn-start-game" class="btn btn-play" onclick="initGame()" disabled>⏳ LOADING DATA...</button>
             </div>
 
             <div id="game-interface" style="display: none;">
                 <div class="game-header">
-                    <h2 id="question-counter">Question 1 of 5</h2>
-                    <div class="score-display" id="score-display">
+                    <h2 id="question-counter">Question 1 of 0</h2>
+                    <div class="score-display">
                         <span>⭐</span> <span id="score">0</span>
                     </div>
                 </div>
@@ -82,23 +69,17 @@
                 </div>
 
                 <div id="quiz-container">
-                    <div class="question-container">
-                        <p>🎧 Listen to the audio and choose the correct image!</p>
-                        <div class="audio-player">
-                            <audio id="audio-player" controls></audio>
-                        </div>
-                    </div>
-                    <div id="answers-grid" class="answers-grid">
-                        </div>
+                    <div class="question-container" style="text-align: center; margin-bottom: 2rem;"></div>
+                    <div id="answers-grid" class="answers-grid"></div>
                 </div>
             </div>
-            
-            <div id="results-container" class="results-container" style="display: none;">
-                <h2>🎉 Quiz Finished! 🎉</h2>
-                <p class="final-score">Your Final Score: <span id="final-score">0</span></p>
-                <div style="display: flex; flex-direction: column; gap: 10px; align-items: center;">
-                    <button class="btn btn-restart" onclick="location.reload()">🚀 Play Again</button>
-                    <button class="btn btn-restart" onclick="window.location.href='index.html'" style="background: #6c757d; font-size: 1.2rem;">🏠 Back to Home</button>
+
+            <div id="results-container" style="display: none; text-align: center; padding: 3rem;">
+                <h2 style="font-size: 3rem; color: var(--primary-color);">🎉 Selesai! 🎉</h2>
+                <p style="font-size: 2rem; margin: 1.5rem 0;">Skor Kamu: <span id="final-score">0</span></p>
+                <div style="display: flex; flex-direction: column; gap: 15px; align-items: center;">
+                    <button class="btn btn-restart" onclick="location.reload()">🚀 Main Lagi</button>
+                    <button class="btn btn-restart" onclick="window.location.href='index.html'" style="background: #6c757d; font-size: 1.2rem;">🏠 Kembali ke Home</button>
                 </div>
             </div>
         </main>
@@ -108,149 +89,135 @@
 
     <script>
         let questions = [];
-        let currentQuestionIndex = 0;
+        let currentIdx = 0;
         let score = 0;
 
         const correctSound = new Audio('https://www.myinstants.com/media/sounds/ding-sound-effect.mp3');
         const incorrectSound = new Audio('https://www.myinstants.com/media/sounds/wrong-answer-2.mp3');
 
-        // Elemen HTML
-        const startOverlay = document.getElementById('start-overlay');
-        const gameInterface = document.getElementById('game-interface');
-        const audioPlayer = document.getElementById('audio-player');
-        const answersGrid = document.getElementById('answers-grid');
-        const questionCounter = document.getElementById('question-counter');
-        const scoreDisplay = document.getElementById('score-display');
-        const scoreSpan = document.getElementById('score');
-        const progressBar = document.getElementById('progress-bar');
-        const quizContainer = document.getElementById('quiz-container');
-        const resultsContainer = document.getElementById('results-container');
-        const finalScoreDisplay = document.getElementById('final-score');
-        const confettiContainer = document.getElementById('confetti-container');
-
-        // Saat halaman dimuat, hanya load pertanyaan, jangan langsung main
-        document.addEventListener('DOMContentLoaded', () => {
-            loadQuestions();
-        });
-
-        function loadQuestions() {
-        // AMBIL DARI LOCALSTORAGE
-        questions = JSON.parse(localStorage.getItem('eduQuizQuestions') || '[]');
-        
-        if (questions.length === 0) {
-            alert("No questions found! Redirecting...");
-            window.location.href = 'index.html';
+        // --- DATABASE HANDLER ---
+        async function loadQuestions() {
+            const DB_NAME = "EduQuizDB";
+            return new Promise((resolve) => {
+                const request = indexedDB.open(DB_NAME, 1);
+                request.onsuccess = (e) => {
+                    const db = e.target.result;
+                    if (!db.objectStoreNames.contains("questions")) { resolve([]); return; }
+                    const tx = db.transaction("questions", "readonly");
+                    const store = tx.objectStore("questions");
+                    const req = store.getAll();
+                    req.onsuccess = () => resolve(req.result);
+                };
+                request.onerror = () => resolve([]);
+            });
         }
-    }
 
-        // Fungsi dipanggil saat tombol START GAME diklik
+        // --- GAME LOGIC ---
+        window.onload = async () => {
+            questions = await loadQuestions();
+            const btn = document.getElementById('btn-start-game');
+            if (questions.length > 0) {
+                btn.innerText = "▶️ START GAME";
+                btn.disabled = false;
+            } else {
+                btn.innerText = "❌ NO DATA";
+                alert("Tidak ada soal di database! Silakan ke Settings dulu.");
+            }
+        };
+
         function initGame() {
-            startOverlay.style.display = 'none'; // Sembunyikan tombol start
-            gameInterface.style.display = 'block'; // Munculkan game
+            document.getElementById('start-overlay').style.display = 'none';
+            document.getElementById('game-interface').style.display = 'block';
             startGame();
         }
 
         function startGame() {
-            currentQuestionIndex = 0;
+            currentIdx = 0;
             score = 0;
-            scoreSpan.textContent = score;
-            progressBar.style.width = '0%';
-            quizContainer.style.display = 'block';
-            resultsContainer.style.display = 'none';
-            confettiContainer.innerHTML = '';
             displayQuestion();
         }
 
         function displayQuestion() {
-    if (currentQuestionIndex >= questions.length) {
-        showResults();
-        return;
-    }
-    const question = questions[currentQuestionIndex];
-    questionCounter.textContent = `Question ${currentQuestionIndex + 1} of ${questions.length}`;
-    
-    // RENDER SOAL
-    const qContainer = document.querySelector('.question-container');
-    qContainer.innerHTML = `
-        <h1 style="font-size: 2.2rem; margin-bottom: 15px;">${question.qData.text}</h1>
-        ${question.qData.useImg ? `<img src="${question.qData.img}" style="max-width:300px; border-radius:15px; margin-bottom:10px;">` : ''}
-        ${question.qData.useAud ? `<div class="audio-player"><audio src="${question.qData.aud}" controls autoplay></audio></div>` : ''}
-    `;
+            if (currentIdx >= questions.length) {
+                showResults(); return;
+            }
 
-    // RENDER JAWABAN
-    answersGrid.innerHTML = '';
-    // Atur grid kolom sesuai jumlah jawaban (max 2 kolom)
-    answersGrid.style.gridTemplateColumns = `repeat(${question.answers.length > 2 ? 2 : 1}, 1fr)`;
+            const q = questions[currentIdx];
+            document.getElementById('question-counter').innerText = `Question ${currentIdx + 1} of ${questions.length}`;
+            document.getElementById('score').innerText = score;
+            document.getElementById('progress-bar').style.width = `${((currentIdx + 1) / questions.length) * 100}%`;
 
-    question.answers.forEach((ans, index) => {
-        const card = document.createElement('div');
-        card.className = 'answer-card';
-        card.style.display = 'flex';
-        card.style.flexDirection = 'column';
-        card.style.alignItems = 'center';
-        card.style.padding = '15px';
+            // Render Soal
+            const qContainer = document.querySelector('.question-container');
+            qContainer.innerHTML = `
+                <h1 style="font-size: 2.2rem; margin-bottom: 20px;">${q.qData.text}</h1>
+                ${q.qData.useImg ? `<img src="${q.qData.img}" style="max-width:300px; border-radius:15px; margin-bottom:15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">` : ''}
+                ${q.qData.useAud ? `<div><audio src="${q.qData.aud}" controls autoplay></audio></div>` : ''}
+            `;
 
-        card.innerHTML = `
-            ${ans.useImg ? `<img src="${ans.img}" style="width:100%; height:150px; object-fit:cover; border-radius:10px; margin-bottom:10px;">` : ''}
-            <p style="font-size: 1.5rem; font-weight: bold;">${ans.text}</p>
-            ${ans.useAud ? `<button onclick="event.stopPropagation(); new Audio('${ans.aud}').play()" style="margin-top:5px; cursor:pointer;">🔊 Play Sound</button>` : ''}
-            <div class="answer-label">${String.fromCharCode(65 + index)}</div>
-        `;
-        card.onclick = () => checkAnswer(index);
-        answersGrid.appendChild(card);
-    });
-}
+            // Render Jawaban
+            const grid = document.getElementById('answers-grid');
+            grid.innerHTML = '';
+            grid.style.gridTemplateColumns = `repeat(${q.answers.length > 2 ? 2 : 1}, 1fr)`;
 
-        function checkAnswer(selectedIndex) {
-            const question = questions[currentQuestionIndex];
-            const correctIndex = question.answers.findIndex(ans => ans.isCorrect);
+            q.answers.forEach((ans, i) => {
+                const card = document.createElement('div');
+                card.className = 'answer-card';
+                card.innerHTML = `
+                    ${ans.useImg ? `<img src="${ans.img}" style="width:100%; height:160px; object-fit:cover; border-radius:10px; margin-bottom:10px;">` : ''}
+                    <p style="font-size: 1.4rem; font-weight: bold;">${ans.text}</p>
+                    ${ans.useAud ? `<button onclick="event.stopPropagation(); new Audio('${ans.aud}').play()" style="margin-top:10px; cursor:pointer; padding:5px 15px; border-radius:20px; border:none; background:var(--primary-color); color:white; font-family:inherit;">🔊 Dengar</button>` : ''}
+                    <div class="answer-label">${String.fromCharCode(65 + i)}</div>
+                `;
+                card.onclick = () => checkAnswer(i);
+                grid.appendChild(card);
+            });
+        }
+
+        function checkAnswer(selectedIdx) {
+            const q = questions[currentIdx];
             const cards = document.querySelectorAll('.answer-card');
+            cards.forEach(c => c.style.pointerEvents = 'none'); // Matikan klik
+
+            const isCorrect = q.answers[selectedIdx].isCorrect;
             
-            // Matikan klik setelah menjawab
-            cards.forEach(card => card.style.pointerEvents = 'none');
-
-            // Pause audio saat menjawab
-            audioPlayer.pause();
-
-            if (selectedIndex === correctIndex) {
+            if (isCorrect) {
                 score++;
-                scoreSpan.textContent = score;
-                scoreDisplay.classList.remove('score-pop');
-                void scoreDisplay.offsetWidth; // Trigger reflow animasi
-                scoreDisplay.classList.add('score-pop');
-                cards[selectedIndex].classList.add('correct');
+                cards[selectedIdx].classList.add('correct');
                 correctSound.play();
             } else {
-                cards[selectedIndex].classList.add('incorrect');
-                cards[correctIndex].classList.add('correct'); // Tunjukkan yang benar
+                cards[selectedIdx].classList.add('incorrect');
+                // Tunjukkan jawaban yang benar
+                const correctIdx = q.answers.findIndex(a => a.isCorrect);
+                cards[correctIdx].classList.add('correct');
                 incorrectSound.play();
             }
 
             setTimeout(() => {
-                currentQuestionIndex++;
+                currentIdx++;
                 displayQuestion();
             }, 2000);
         }
 
         function showResults() {
-            gameInterface.style.display = 'none'; // Sembunyikan area game
-            resultsContainer.style.display = 'block'; // Munculkan hasil
-            finalScoreDisplay.textContent = `${score} / ${questions.length}`;
-            launchConfetti();
+            document.getElementById('game-interface').style.display = 'none';
+            document.getElementById('results-container').style.display = 'block';
+            document.getElementById('final-score').innerText = `${score} / ${questions.length}`;
+            if (score === questions.length) launchConfetti();
         }
 
         function launchConfetti() {
-            const emojis = ['🎉', '🎊', '🌟', '✨', '🏆', '🎈'];
+            const container = document.getElementById('confetti-container');
+            const emojis = ['🎉', '✨', '🌟', '🏆', '🔥'];
             for (let i = 0; i < 50; i++) {
-                setTimeout(() => {
-                    const confetti = document.createElement('div');
-                    confetti.className = 'confetti';
-                    confetti.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-                    confetti.style.left = `${Math.random() * 100}%`;
-                    confetti.style.animationDuration = `${Math.random() * 3 + 2}s`;
-                    confetti.style.fontSize = `${Math.random() * 2 + 1}rem`;
-                    confettiContainer.appendChild(confetti);
-                }, i * 30);
+                const c = document.createElement('div');
+                c.className = 'confetti';
+                c.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+                c.style.left = Math.random() * 100 + '%';
+                c.style.fontSize = (Math.random() * 2 + 1) + 'rem';
+                c.style.animationDuration = (Math.random() * 2 + 1) + 's';
+                c.style.animationDelay = Math.random() + 's';
+                container.appendChild(c);
             }
         }
     </script>

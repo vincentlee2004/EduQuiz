@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EduQuiz - Pro Settings</title>
+    <title>EduQuiz - Pro Settings (IndexedDB)</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -18,39 +18,29 @@
         .container { max-width: 1100px; margin: auto; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: var(--border-radius); box-shadow: var(--shadow); overflow: hidden; }
         header { background: linear-gradient(90deg, var(--primary-color), var(--accent-color)); color: var(--white); padding: 1.5rem; text-align: center; font-size: 2.5rem; font-weight: 700; }
         main { padding: 2rem; }
-        
         .settings-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
         .btn { padding: 0.8rem 1.5rem; font-size: 1rem; font-weight: 600; border: none; border-radius: 50px; cursor: pointer; transition: 0.3s; color: var(--white); display: flex; align-items: center; gap: 8px; }
         .btn-back { background: var(--dark-color); }
         .btn-save { background: var(--secondary-color); width: 100%; padding: 1.2rem; font-size: 1.3rem; margin-top: 2rem; justify-content: center; }
         .btn-edit { background: var(--primary-color); padding: 0.5rem 1rem; }
         .btn-delete { background: var(--danger-color); padding: 0.5rem 1rem; }
-
         .question-list { margin-bottom: 3rem; background: var(--white); padding: 1.5rem; border-radius: 15px; }
         .question-item { background: var(--light-color); padding: 1rem; border-radius: 12px; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; border-left: 6px solid var(--primary-color); }
-
         .add-question-form { background: #fff; padding: 2rem; border-radius: var(--border-radius); border: 3px dashed var(--accent-color); }
         .section-title { margin-bottom: 1.5rem; color: var(--primary-color); border-bottom: 2px solid #eee; padding-bottom: 5px; }
-        
         .form-group { margin-bottom: 1.5rem; }
         label { display: block; margin-bottom: 0.6rem; font-weight: 600; font-size: 1.1rem; }
-        input[type="text"], input[type="number"], select, input[type="file"] { width: 100%; padding: 0.8rem; border: 2px solid #ddd; border-radius: 12px; font-family: inherit; font-size: 1rem; }
-        
+        input[type="text"], input[type="number"], select, input[type="file"] { width: 100%; padding: 0.8rem; border: 2px solid #ddd; border-radius: 12px; font-family: inherit; }
         .media-toggle { display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
         .media-btn { padding: 5px 12px; border: 1px solid #ccc; border-radius: 20px; font-size: 0.8rem; cursor: pointer; background: #eee; }
         .media-btn.active { background: var(--primary-color); color: white; border-color: var(--primary-color); }
-
         .answer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1rem; }
-        .answer-card { background: var(--light-color); padding: 1.5rem; border-radius: 15px; border: 1px solid #ddd; position: relative; }
-        .answer-card.correct-selected { border: 3px solid var(--secondary-color); background: #eafff5; }
-        
-        .preview-box { width: 100%; height: 120px; background: #e9ecef; border-radius: 10px; margin: 10px 0; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        .preview-box img { width: 100%; height: 100%; object-fit: cover; }
+        .answer-card { background: var(--light-color); padding: 1.5rem; border-radius: 15px; border: 1px solid #ddd; }
     </style>
 </head>
 <body>
     <div class="container">
-        <header>⚙️ EduQuiz Editor</header>
+        <header>⚙️ EduQuiz Pro Editor</header>
         <main>
             <div class="settings-header">
                 <h2>Manage Questions</h2>
@@ -69,37 +59,70 @@
                         <input type="text" id="q-text" required placeholder="Contoh: Apa nama hewan ini?">
                         
                         <div class="media-toggle" style="margin-top:10px;">
-                            <span>Gunakan media tambahan? </span>
+                            <span>Media tambahan? </span>
                             <button type="button" class="media-btn" id="q-btn-img" onclick="toggleMedia('q', 'img')">🖼️ Gambar</button>
                             <button type="button" class="media-btn" id="q-btn-aud" onclick="toggleMedia('q', 'aud')">🎵 Audio</button>
                         </div>
-                        
                         <input type="file" id="q-img" accept="image/*" style="display:none; margin-top:5px;">
                         <input type="file" id="q-aud" accept="audio/*" style="display:none; margin-top:5px;">
                     </div>
 
                     <div class="form-group">
-                        <label>🔢 Jumlah Pilihan Jawaban (Custom):</label>
+                        <label>🔢 Jumlah Jawaban:</label>
                         <input type="number" id="ans-count" value="4" min="2" onchange="renderAnswerCards()">
                     </div>
 
                     <h3 class="section-title">Pilihan Jawaban</h3>
                     <div id="answers-container" class="answer-grid"></div>
 
-                    <button type="submit" class="btn btn-save">💾 Simpan Soal</button>
+                    <button type="submit" class="btn btn-save" id="btn-save-main">💾 Simpan ke Database</button>
                 </form>
             </div>
         </main>
     </div>
 
     <script>
-        let questions = JSON.parse(localStorage.getItem('eduQuizQuestions') || '[]');
-        let qMedia = { img: false, aud: false };
+        // --- DATABASE LOGIC (INDEXEDDB) ---
+        const DB_NAME = "EduQuizDB";
+        const STORE_NAME = "questions";
+
+        function openDB() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open(DB_NAME, 1);
+                request.onupgradeneeded = e => e.target.result.createObjectStore(STORE_NAME, { keyPath: "id", autoIncrement: true });
+                request.onsuccess = e => resolve(e.target.result);
+                request.onerror = e => reject(e.target.error);
+            });
+        }
+
+        async function getQuestions() {
+            const db = await openDB();
+            return new Promise(res => {
+                const req = db.transaction(STORE_NAME).objectStore(STORE_NAME).getAll();
+                req.onsuccess = () => res(req.result);
+            });
+        }
+
+        async function saveQuestion(data) {
+            const db = await openDB();
+            const tx = db.transaction(STORE_NAME, "readwrite");
+            tx.objectStore(STORE_NAME).put(data);
+            return new Promise(res => tx.oncomplete = res);
+        }
+
+        async function deleteQuestion(id) {
+            const db = await openDB();
+            const tx = db.transaction(STORE_NAME, "readwrite");
+            tx.objectStore(STORE_NAME).delete(id);
+            return new Promise(res => tx.oncomplete = res);
+        }
+
+        // --- UI LOGIC ---
+        let localQuestions = [];
 
         function toggleMedia(prefix, type, idx = null) {
             const btn = idx !== null ? document.getElementById(`${prefix}-btn-${type}-${idx}`) : document.getElementById(`${prefix}-btn-${type}`);
             const input = idx !== null ? document.getElementById(`${prefix}-${type}-${idx}`) : document.getElementById(`${prefix}-${type}`);
-            
             const isActive = btn.classList.toggle('active');
             input.style.display = isActive ? 'block' : 'none';
         }
@@ -116,15 +139,11 @@
                 div.innerHTML = `
                     <label>Pilihan ${String.fromCharCode(65+i)}:</label>
                     <input type="text" class="ans-text" required placeholder="Teks jawaban..." value="${data?.text || ''}">
-                    
                     <div class="media-toggle" style="margin-top:10px;">
                         <button type="button" class="media-btn ${data?.useImg ? 'active' : ''}" id="a-btn-img-${i}" onclick="toggleMedia('a', 'img', ${i})">🖼️</button>
                         <button type="button" class="media-btn ${data?.useAud ? 'active' : ''}" id="a-btn-aud-${i}" onclick="toggleMedia('a', 'aud', ${i})">🎵</button>
-                        <label style="display:inline; margin-left:10px; font-size:0.8rem;">
-                            <input type="radio" name="is-correct" value="${i}" ${data?.isCorrect ? 'checked' : ''} required> Benar
-                        </label>
+                        <label style="display:inline; margin-left:10px;"><input type="radio" name="correct" value="${i}" ${data?.isCorrect ? 'checked' : ''} required> Benar</label>
                     </div>
-
                     <input type="file" id="a-img-${i}" accept="image/*" style="display:${data?.useImg ? 'block' : 'none'}; margin-top:5px;">
                     <input type="file" id="a-aud-${i}" accept="audio/*" style="display:${data?.useAud ? 'block' : 'none'}; margin-top:5px;">
                 `;
@@ -133,7 +152,7 @@
         }
 
         async function toBase64(file) {
-            return new Promise((res) => {
+            return new Promise(res => {
                 const r = new FileReader(); r.readAsDataURL(file);
                 r.onload = () => res(r.result);
             });
@@ -141,9 +160,10 @@
 
         document.getElementById('quiz-form').onsubmit = async (e) => {
             e.preventDefault();
+            const btn = document.getElementById('btn-save-main');
+            btn.disabled = true; btn.innerText = "⏳ Menyimpan...";
+
             const editIdx = parseInt(document.getElementById('edit-idx').value);
-            
-            // Proses Soal
             const qObj = {
                 text: document.getElementById('q-text').value,
                 useImg: document.getElementById('q-btn-img').classList.contains('active'),
@@ -153,65 +173,56 @@
 
             if(qObj.useImg) {
                 const f = document.getElementById('q-img').files[0];
-                qObj.img = f ? await toBase64(f) : (editIdx > -1 ? questions[editIdx].qData.img : "");
+                qObj.img = f ? await toBase64(f) : (editIdx > -1 ? localQuestions[editIdx].qData.img : "");
             }
             if(qObj.useAud) {
                 const f = document.getElementById('q-aud').files[0];
-                qObj.aud = f ? await toBase64(f) : (editIdx > -1 ? questions[editIdx].qData.aud : "");
+                qObj.aud = f ? await toBase64(f) : (editIdx > -1 ? localQuestions[editIdx].qData.aud : "");
             }
 
-            // Proses Jawaban
             const answers = [];
             const cards = document.querySelectorAll('.answer-card');
-            const correctIdx = document.querySelector('input[name="is-correct"]:checked').value;
+            const correctIdx = document.querySelector('input[name="correct"]:checked').value;
 
             for(let i=0; i<cards.length; i++) {
                 const useImg = document.getElementById(`a-btn-img-${i}`).classList.contains('active');
                 const useAud = document.getElementById(`a-btn-aud-${i}`).classList.contains('active');
-                
-                let imgData = "";
-                let audData = "";
-
+                let imgData = "", audData = "";
                 if(useImg) {
                     const f = document.getElementById(`a-img-${i}`).files[0];
-                    imgData = f ? await toBase64(f) : (editIdx > -1 && questions[editIdx].answers[i] ? questions[editIdx].answers[i].img : "");
+                    imgData = f ? await toBase64(f) : (editIdx > -1 && localQuestions[editIdx].answers[i] ? localQuestions[editIdx].answers[i].img : "");
                 }
                 if(useAud) {
                     const f = document.getElementById(`a-aud-${i}`).files[0];
-                    audData = f ? await toBase64(f) : (editIdx > -1 && questions[editIdx].answers[i] ? questions[editIdx].answers[i].aud : "");
+                    audData = f ? await toBase64(f) : (editIdx > -1 && localQuestions[editIdx].answers[i] ? localQuestions[editIdx].answers[i].aud : "");
                 }
-
-                answers.push({
-                    text: cards[i].querySelector('.ans-text').value,
-                    useImg, useAud, img: imgData, aud: audData,
-                    isCorrect: i == correctIdx
-                });
+                answers.push({ text: cards[i].querySelector('.ans-text').value, useImg, useAud, img: imgData, aud: audData, isCorrect: i == correctIdx });
             }
 
-            const payload = { id: Date.now(), qData: qObj, answers };
-            if(editIdx > -1) questions[editIdx] = payload;
-            else questions.push(payload);
+            const payload = { qData: qObj, answers };
+            if(editIdx > -1) payload.id = localQuestions[editIdx].id;
 
-            localStorage.setItem('eduQuizQuestions', JSON.stringify(questions));
+            await saveQuestion(payload);
             location.reload();
         };
 
-        function renderList() {
+        async function renderList() {
+            localQuestions = await getQuestions();
             const list = document.getElementById('q-list');
-            list.innerHTML = '<h3>Daftar Soal Tersimpan</h3>';
-            if(questions.length === 0) list.innerHTML += '<p>Belum ada soal.</p>';
-            questions.forEach((q, i) => {
+            list.innerHTML = '<h3>Daftar Soal</h3>';
+            if(localQuestions.length === 0) list.innerHTML += '<p>Belum ada soal.</p>';
+            localQuestions.forEach((q, i) => {
                 const div = document.createElement('div');
                 div.className = 'question-item';
                 div.innerHTML = `<span><b>${i+1}.</b> ${q.qData.text}</span>
                 <div><button class="btn btn-edit" onclick="editQ(${i})">✏️</button>
-                <button class="btn btn-delete" onclick="delQ(${i})">🗑️</button></div>`;
+                <button class="btn btn-delete" onclick="delQ(${q.id})">🗑️</button></div>`;
                 list.appendChild(div);
             });
         }
 
         function editQ(i) {
-            const q = questions[i];
+            const q = localQuestions[i];
             document.getElementById('edit-idx').value = i;
             document.getElementById('q-text').value = q.qData.text;
             if(q.qData.useImg) toggleMedia('q', 'img');
@@ -222,7 +233,7 @@
             window.scrollTo(0, document.body.scrollHeight);
         }
 
-        function delQ(i) { if(confirm("Hapus soal ini?")) { questions.splice(i,1); localStorage.setItem('eduQuizQuestions', JSON.stringify(questions)); renderList(); } }
+        async function delQ(id) { if(confirm("Hapus soal?")) { await deleteQuestion(id); renderList(); } }
 
         window.onload = () => { renderList(); renderAnswerCards(); };
     </script>
