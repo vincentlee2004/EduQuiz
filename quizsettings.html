@@ -3,239 +3,221 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EduQuiz - Pro Settings (IndexedDB)</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>EduQuiz - Cloud Editor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary-color: #0D6EFD; --secondary-color: #198754; --accent-color: #FFC107;
             --danger-color: #DC3545; --dark-color: #212529; --light-color: #F8F9FA;
-            --white: #ffffff; --shadow: 0 8px 25px rgba(0, 0, 0, 0.15); --border-radius: 20px;
+            --white: #ffffff; --shadow: 0 8px 25px rgba(0, 0, 0, 0.1); --border-radius: 20px;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Fredoka', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 2rem; color: var(--dark-color); }
-        .container { max-width: 1100px; margin: auto; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: var(--border-radius); box-shadow: var(--shadow); overflow: hidden; }
-        header { background: linear-gradient(90deg, var(--primary-color), var(--accent-color)); color: var(--white); padding: 1.5rem; text-align: center; font-size: 2.5rem; font-weight: 700; }
-        main { padding: 2rem; }
-        .settings-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
-        .btn { padding: 0.8rem 1.5rem; font-size: 1rem; font-weight: 600; border: none; border-radius: 50px; cursor: pointer; transition: 0.3s; color: var(--white); display: flex; align-items: center; gap: 8px; }
-        .btn-back { background: var(--dark-color); }
-        .btn-save { background: var(--secondary-color); width: 100%; padding: 1.2rem; font-size: 1.3rem; margin-top: 2rem; justify-content: center; }
-        .btn-edit { background: var(--primary-color); padding: 0.5rem 1rem; }
-        .btn-delete { background: var(--danger-color); padding: 0.5rem 1rem; }
-        .question-list { margin-bottom: 3rem; background: var(--white); padding: 1.5rem; border-radius: 15px; }
-        .question-item { background: var(--light-color); padding: 1rem; border-radius: 12px; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; border-left: 6px solid var(--primary-color); }
-        .add-question-form { background: #fff; padding: 2rem; border-radius: var(--border-radius); border: 3px dashed var(--accent-color); }
-        .section-title { margin-bottom: 1.5rem; color: var(--primary-color); border-bottom: 2px solid #eee; padding-bottom: 5px; }
-        .form-group { margin-bottom: 1.5rem; }
-        label { display: block; margin-bottom: 0.6rem; font-weight: 600; font-size: 1.1rem; }
-        input[type="text"], input[type="number"], select, input[type="file"] { width: 100%; padding: 0.8rem; border: 2px solid #ddd; border-radius: 12px; font-family: inherit; }
-        .media-toggle { display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
-        .media-btn { padding: 5px 12px; border: 1px solid #ccc; border-radius: 20px; font-size: 0.8rem; cursor: pointer; background: #eee; }
-        .media-btn.active { background: var(--primary-color); color: white; border-color: var(--primary-color); }
-        .answer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1rem; }
-        .answer-card { background: var(--light-color); padding: 1.5rem; border-radius: 15px; border: 1px solid #ddd; }
+        body { font-family: 'Fredoka', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; color: var(--dark-color); }
+        .container { max-width: 1000px; margin: auto; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: var(--border-radius); box-shadow: var(--shadow); overflow: hidden; }
+        header { background: linear-gradient(90deg, var(--primary-color), var(--accent-color)); color: var(--white); padding: 20px; text-align: center; font-size: 2rem; font-weight: 700; }
+        main { padding: 25px; }
+        .btn { padding: 10px 20px; border-radius: 50px; border: none; cursor: pointer; font-weight: 600; transition: 0.3s; color: white; }
+        .btn-save { background: var(--secondary-color); width: 100%; font-size: 1.2rem; margin-top: 20px; }
+        .btn-edit { background: var(--primary-color); margin-right: 5px; }
+        .btn-delete { background: var(--danger-color); }
+        .question-item { background: white; padding: 15px; border-radius: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border-left: 6px solid var(--primary-color); }
+        .form-box { background: #fff; padding: 20px; border-radius: var(--border-radius); border: 2px dashed var(--accent-color); margin-top: 30px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: 600; }
+        input, select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 10px; font-family: inherit; }
+        .media-toggle { display: flex; gap: 8px; margin: 8px 0; }
+        .m-btn { padding: 4px 12px; border-radius: 20px; border: 1px solid #ccc; cursor: pointer; font-size: 0.8rem; background: #eee; }
+        .m-btn.active { background: var(--primary-color); color: white; border-color: var(--primary-color); }
+        .ans-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; }
+        .ans-card { background: var(--light-color); padding: 15px; border-radius: 12px; border: 1px solid #ddd; }
     </style>
 </head>
 <body>
     <div class="container">
-        <header>⚙️ EduQuiz Pro Editor</header>
+        <header>⚙️ EduQuiz Cloud Editor</header>
         <main>
-            <div class="settings-header">
-                <h2>Manage Questions</h2>
-                <button class="btn btn-back" onclick="window.location.href='index.html'">🏠 Back Home</button>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+                <h2>Daftar Soal Cloud</h2>
+                <button class="btn" style="background: var(--dark-color);" onclick="window.location.href='index.html'">🏠 Home</button>
             </div>
 
-            <div class="question-list" id="q-list"></div>
+            <div id="q-list">Memuat data kuis...</div>
 
-            <div class="add-question-form">
-                <h3 id="form-title" class="section-title">Tambah Soal Baru</h3>
+            <div class="form-box">
+                <h3 id="form-title" style="margin-bottom: 15px; color: var(--primary-color);">Tambah Soal Baru</h3>
                 <form id="quiz-form">
-                    <input type="hidden" id="edit-idx" value="-1">
+                    <input type="hidden" id="edit-id" value="">
                     
                     <div class="form-group">
-                        <label>📝 Teks Soal (Wajib):</label>
-                        <input type="text" id="q-text" required placeholder="Contoh: Apa nama hewan ini?">
-                        
-                        <div class="media-toggle" style="margin-top:10px;">
-                            <span>Media tambahan? </span>
-                            <button type="button" class="media-btn" id="q-btn-img" onclick="toggleMedia('q', 'img')">🖼️ Gambar</button>
-                            <button type="button" class="media-btn" id="q-btn-aud" onclick="toggleMedia('q', 'aud')">🎵 Audio</button>
+                        <label>📝 Teks Pertanyaan (Wajib):</label>
+                        <input type="text" id="q-text" required placeholder="Ketik pertanyaan...">
+                        <div class="media-toggle">
+                            <span>Gunakan media?</span>
+                            <button type="button" class="m-btn" id="q-btn-img" onclick="toggleMedia('q', 'img')">🖼️ Gambar</button>
+                            <button type="button" class="m-btn" id="q-btn-aud" onclick="toggleMedia('q', 'aud')">🎵 Audio</button>
                         </div>
                         <input type="file" id="q-img" accept="image/*" style="display:none; margin-top:5px;">
                         <input type="file" id="q-aud" accept="audio/*" style="display:none; margin-top:5px;">
                     </div>
 
                     <div class="form-group">
-                        <label>🔢 Jumlah Jawaban:</label>
+                        <label>🔢 Jumlah Pilihan Jawaban:</label>
                         <input type="number" id="ans-count" value="4" min="2" onchange="renderAnswerCards()">
                     </div>
 
-                    <h3 class="section-title">Pilihan Jawaban</h3>
-                    <div id="answers-container" class="answer-grid"></div>
+                    <div id="ans-container" class="ans-grid"></div>
 
-                    <button type="submit" class="btn btn-save" id="btn-save-main">💾 Simpan ke Database</button>
+                    <button type="submit" class="btn btn-save" id="btn-save">💾 Simpan ke Cloud</button>
                 </form>
             </div>
         </main>
     </div>
 
-    <script>
-        // --- DATABASE LOGIC (INDEXEDDB) ---
-        const DB_NAME = "EduQuizDB";
-        const STORE_NAME = "questions";
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, set, push, onValue, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-        function openDB() {
-            return new Promise((resolve, reject) => {
-                const request = indexedDB.open(DB_NAME, 1);
-                request.onupgradeneeded = e => e.target.result.createObjectStore(STORE_NAME, { keyPath: "id", autoIncrement: true });
-                request.onsuccess = e => resolve(e.target.result);
-                request.onerror = e => reject(e.target.error);
-            });
-        }
+        // GANTI DENGAN CONFIG KAMU SENDIRI
+        const firebaseConfig = {
+            apiKey: "AIzaSy...",
+            authDomain: "eduquiz-ac27a.firebaseapp.com",
+            databaseURL: "https://eduquiz-ac27a-default-rtdb.asia-southeast1.firebasedatabase.app/",
+            projectId: "eduquiz-ac27a",
+            storageBucket: "eduquiz-ac27a.appspot.com",
+            messagingSenderId: "...",
+            appId: "..."
+        };
 
-        async function getQuestions() {
-            const db = await openDB();
-            return new Promise(res => {
-                const req = db.transaction(STORE_NAME).objectStore(STORE_NAME).getAll();
-                req.onsuccess = () => res(req.result);
-            });
-        }
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        let cloudQuestions = {};
 
-        async function saveQuestion(data) {
-            const db = await openDB();
-            const tx = db.transaction(STORE_NAME, "readwrite");
-            tx.objectStore(STORE_NAME).put(data);
-            return new Promise(res => tx.oncomplete = res);
-        }
-
-        async function deleteQuestion(id) {
-            const db = await openDB();
-            const tx = db.transaction(STORE_NAME, "readwrite");
-            tx.objectStore(STORE_NAME).delete(id);
-            return new Promise(res => tx.oncomplete = res);
-        }
-
-        // --- UI LOGIC ---
-        let localQuestions = [];
-
-        function toggleMedia(prefix, type, idx = null) {
-            const btn = idx !== null ? document.getElementById(`${prefix}-btn-${type}-${idx}`) : document.getElementById(`${prefix}-btn-${type}`);
-            const input = idx !== null ? document.getElementById(`${prefix}-${type}-${idx}`) : document.getElementById(`${prefix}-${type}`);
-            const isActive = btn.classList.toggle('active');
-            input.style.display = isActive ? 'block' : 'none';
-        }
-
-        function renderAnswerCards(existing = null) {
-            const count = parseInt(document.getElementById('ans-count').value) || 2;
-            const container = document.getElementById('answers-container');
-            container.innerHTML = '';
-
-            for (let i = 0; i < count; i++) {
-                const data = existing ? existing[i] : null;
+        // Ambil Data Live
+        onValue(ref(db, 'questions'), (snapshot) => {
+            const data = snapshot.val() || {};
+            cloudQuestions = data;
+            const list = document.getElementById('q-list');
+            list.innerHTML = '';
+            
+            Object.keys(data).forEach((key, i) => {
+                const q = data[key];
                 const div = document.createElement('div');
-                div.className = 'answer-card';
+                div.className = 'question-item';
                 div.innerHTML = `
-                    <label>Pilihan ${String.fromCharCode(65+i)}:</label>
-                    <input type="text" class="ans-text" required placeholder="Teks jawaban..." value="${data?.text || ''}">
-                    <div class="media-toggle" style="margin-top:10px;">
-                        <button type="button" class="media-btn ${data?.useImg ? 'active' : ''}" id="a-btn-img-${i}" onclick="toggleMedia('a', 'img', ${i})">🖼️</button>
-                        <button type="button" class="media-btn ${data?.useAud ? 'active' : ''}" id="a-btn-aud-${i}" onclick="toggleMedia('a', 'aud', ${i})">🎵</button>
-                        <label style="display:inline; margin-left:10px;"><input type="radio" name="correct" value="${i}" ${data?.isCorrect ? 'checked' : ''} required> Benar</label>
+                    <span><b>${i+1}.</b> ${q.qData.text}</span>
+                    <div>
+                        <button class="btn btn-edit" onclick="editQ('${key}')">✏️</button>
+                        <button class="btn btn-delete" onclick="delQ('${key}')">🗑️</button>
                     </div>
-                    <input type="file" id="a-img-${i}" accept="image/*" style="display:${data?.useImg ? 'block' : 'none'}; margin-top:5px;">
-                    <input type="file" id="a-aud-${i}" accept="audio/*" style="display:${data?.useAud ? 'block' : 'none'}; margin-top:5px;">
                 `;
-                container.appendChild(div);
-            }
-        }
-
-        async function toBase64(file) {
-            return new Promise(res => {
-                const r = new FileReader(); r.readAsDataURL(file);
-                r.onload = () => res(r.result);
+                list.appendChild(div);
             });
-        }
+        });
 
+        // Simpan Data
         document.getElementById('quiz-form').onsubmit = async (e) => {
             e.preventDefault();
-            const btn = document.getElementById('btn-save-main');
-            btn.disabled = true; btn.innerText = "⏳ Menyimpan...";
+            const btn = document.getElementById('btn-save');
+            btn.disabled = true; btn.innerText = "⏳ Sedang Mengirim...";
 
-            const editIdx = parseInt(document.getElementById('edit-idx').value);
-            const qObj = {
+            const editId = document.getElementById('edit-id').value;
+            
+            const qData = {
                 text: document.getElementById('q-text').value,
                 useImg: document.getElementById('q-btn-img').classList.contains('active'),
                 useAud: document.getElementById('q-btn-aud').classList.contains('active'),
                 img: "", aud: ""
             };
 
-            if(qObj.useImg) {
+            if(qData.useImg) {
                 const f = document.getElementById('q-img').files[0];
-                qObj.img = f ? await toBase64(f) : (editIdx > -1 ? localQuestions[editIdx].qData.img : "");
+                qData.img = f ? await toB64(f) : (editId ? cloudQuestions[editId].qData.img : "");
             }
-            if(qObj.useAud) {
+            if(qData.useAud) {
                 const f = document.getElementById('q-aud').files[0];
-                qObj.aud = f ? await toBase64(f) : (editIdx > -1 ? localQuestions[editIdx].qData.aud : "");
+                qData.aud = f ? await toB64(f) : (editId ? cloudQuestions[editId].qData.aud : "");
             }
 
             const answers = [];
-            const cards = document.querySelectorAll('.answer-card');
+            const cards = document.querySelectorAll('.ans-card');
             const correctIdx = document.querySelector('input[name="correct"]:checked').value;
 
-            for(let i=0; i<cards.length; i++) {
-                const useImg = document.getElementById(`a-btn-img-${i}`).classList.contains('active');
-                const useAud = document.getElementById(`a-btn-aud-${i}`).classList.contains('active');
-                let imgData = "", audData = "";
-                if(useImg) {
+            for(let i=0; i<cards.length; i++){
+                const uImg = document.getElementById(`a-btn-img-${i}`).classList.contains('active');
+                const uAud = document.getElementById(`a-btn-aud-${i}`).classList.contains('active');
+                let imgD = "", audD = "";
+
+                if(uImg) {
                     const f = document.getElementById(`a-img-${i}`).files[0];
-                    imgData = f ? await toBase64(f) : (editIdx > -1 && localQuestions[editIdx].answers[i] ? localQuestions[editIdx].answers[i].img : "");
+                    imgD = f ? await toB64(f) : (editId && cloudQuestions[editId].answers[i] ? cloudQuestions[editId].answers[i].img : "");
                 }
-                if(useAud) {
+                if(uAud) {
                     const f = document.getElementById(`a-aud-${i}`).files[0];
-                    audData = f ? await toBase64(f) : (editIdx > -1 && localQuestions[editIdx].answers[i] ? localQuestions[editIdx].answers[i].aud : "");
+                    audD = f ? await toB64(f) : (editId && cloudQuestions[editId].answers[i] ? cloudQuestions[editId].answers[i].aud : "");
                 }
-                answers.push({ text: cards[i].querySelector('.ans-text').value, useImg, useAud, img: imgData, aud: audData, isCorrect: i == correctIdx });
+
+                answers.push({
+                    text: cards[i].querySelector('.ans-text').value,
+                    useImg: uImg, useAud: uAud, img: imgD, aud: audD,
+                    isCorrect: i == correctIdx
+                });
             }
 
-            const payload = { qData: qObj, answers };
-            if(editIdx > -1) payload.id = localQuestions[editIdx].id;
-
-            await saveQuestion(payload);
+            const finalData = { qData, answers, id: editId || Date.now() };
+            const path = editId ? `questions/${editId}` : `questions/${finalData.id}`;
+            
+            await set(ref(db, path), finalData);
+            alert("Berhasil disimpan ke Cloud!");
             location.reload();
         };
 
-        async function renderList() {
-            localQuestions = await getQuestions();
-            const list = document.getElementById('q-list');
-            list.innerHTML = '<h3>Daftar Soal</h3>';
-            if(localQuestions.length === 0) list.innerHTML += '<p>Belum ada soal.</p>';
-            localQuestions.forEach((q, i) => {
-                const div = document.createElement('div');
-                div.className = 'question-item';
-                div.innerHTML = `<span><b>${i+1}.</b> ${q.qData.text}</span>
-                <div><button class="btn btn-edit" onclick="editQ(${i})">✏️</button>
-                <button class="btn btn-delete" onclick="delQ(${q.id})">🗑️</button></div>`;
-                list.appendChild(div);
-            });
-        }
-
-        function editQ(i) {
-            const q = localQuestions[i];
-            document.getElementById('edit-idx').value = i;
+        window.delQ = (id) => { if(confirm("Hapus soal?")) remove(ref(db, `questions/${id}`)); };
+        window.editQ = (id) => {
+            const q = cloudQuestions[id];
+            document.getElementById('edit-id').value = id;
             document.getElementById('q-text').value = q.qData.text;
             if(q.qData.useImg) toggleMedia('q', 'img');
             if(q.qData.useAud) toggleMedia('q', 'aud');
             document.getElementById('ans-count').value = q.answers.length;
             renderAnswerCards(q.answers);
-            document.getElementById('form-title').innerText = "Edit Soal " + (i+1);
+            document.getElementById('form-title').innerText = "Edit Soal";
             window.scrollTo(0, document.body.scrollHeight);
+        };
+    </script>
+
+    <script>
+        function toggleMedia(prefix, type, idx = null) {
+            const bId = idx !== null ? `${prefix}-btn-${type}-${idx}` : `${prefix}-btn-${type}`;
+            const iId = idx !== null ? `${prefix}-${type}-${idx}` : `${prefix}-${type}`;
+            const btn = document.getElementById(bId);
+            const isActive = btn.classList.toggle('active');
+            document.getElementById(iId).style.display = isActive ? 'block' : 'none';
         }
 
-        async function delQ(id) { if(confirm("Hapus soal?")) { await deleteQuestion(id); renderList(); } }
-
-        window.onload = () => { renderList(); renderAnswerCards(); };
+        function renderAnswerCards(existing = null) {
+            const count = parseInt(document.getElementById('ans-count').value) || 2;
+            const container = document.getElementById('ans-container');
+            container.innerHTML = '';
+            for(let i=0; i<count; i++) {
+                const d = existing ? existing[i] : null;
+                const div = document.createElement('div');
+                div.className = 'ans-card';
+                div.innerHTML = `
+                    <label>Pilihan ${String.fromCharCode(65+i)}:</label>
+                    <input type="text" class="ans-text" required value="${d?.text || ''}">
+                    <div class="media-toggle">
+                        <button type="button" class="m-btn ${d?.useImg ? 'active' : ''}" id="a-btn-img-${i}" onclick="toggleMedia('a', 'img', ${i})">🖼️</button>
+                        <button type="button" class="m-btn ${d?.useAud ? 'active' : ''}" id="a-btn-aud-${i}" onclick="toggleMedia('a', 'aud', ${i})">🎵</button>
+                        <label style="display:inline; margin-left:10px;"><input type="radio" name="correct" value="${i}" ${d?.isCorrect ? 'checked' : ''} required> Benar</label>
+                    </div>
+                    <input type="file" id="a-img-${i}" accept="image/*" style="display:${d?.useImg?'block':'none'}; margin-top:5px;">
+                    <input type="file" id="a-aud-${i}" accept="audio/*" style="display:${d?.useAud?'block':'none'}; margin-top:5px;">
+                `;
+                container.appendChild(div);
+            }
+        }
+        function toB64(f) { return new Promise(res => { const r = new FileReader(); r.readAsDataURL(f); r.onload = () => res(r.result); }); }
+        window.onload = () => renderAnswerCards();
     </script>
 </body>
 </html>

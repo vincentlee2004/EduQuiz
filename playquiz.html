@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EduQuiz - Play</title>
+    <title>EduQuiz - Fun Play!</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -13,149 +13,216 @@
             --danger-color: #DC3545; --dark-color: #212529; --light-color: #F8F9FA;
             --white: #ffffff; --shadow: 0 8px 25px rgba(0, 0, 0, 0.15); --border-radius: 20px;
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Fredoka', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; display: flex; justify-content: center; align-items: center; color: var(--dark-color); }
-        .container { width: 95%; max-width: 1200px; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); border-radius: var(--border-radius); box-shadow: var(--shadow); overflow: hidden; border: 3px solid var(--white); }
-        header { background: linear-gradient(90deg, var(--primary-color), var(--accent-color)); color: var(--white); padding: 1.5rem; text-align: center; font-size: 2.5rem; font-weight: 700; }
-        main { padding: 2rem; min-height: 500px; position: relative; }
-        
-        .start-overlay { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; min-height: 400px; text-align: center; }
-        .game-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
-        .score-display { font-size: 1.8rem; font-weight: 700; color: var(--primary-color); display: flex; align-items: center; gap: 0.5rem; }
-        
-        .progress-bar-container { width: 100%; height: 25px; background-color: var(--light-color); border-radius: 50px; overflow: hidden; margin-bottom: 2rem; border: 2px solid #ddd; }
-        .progress-bar { height: 100%; background: linear-gradient(90deg, var(--secondary-color), var(--accent-color)); width: 0%; transition: width 0.5s; border-radius: 50px; }
-        
-        .answers-grid { display: grid; gap: 1.5rem; margin-top: 2rem; }
-        .answer-card { border-radius: var(--border-radius); overflow: hidden; cursor: pointer; transition: 0.3s; border: 5px solid transparent; position: relative; background: #fff; text-align: center; padding: 15px; }
-        .answer-card:hover { transform: scale(1.02); box-shadow: var(--shadow); }
-        .answer-card.correct { border-color: var(--secondary-color); animation: pulse 0.6s; }
-        .answer-card.incorrect { border-color: var(--danger-color); animation: shake 0.5s; }
-        
-        .answer-label { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.7); color: white; font-size: 1.5rem; font-weight: bold; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; border-radius: 50%; }
-        
-        .btn { padding: 1.2rem 2.5rem; font-size: 1.5rem; font-weight: 600; border: none; border-radius: 50px; cursor: pointer; transition: 0.3s; color: var(--white); box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
-        .btn-play { background: linear-gradient(45deg, var(--secondary-color), #20c997); }
-        .btn-restart { background: linear-gradient(45deg, var(--primary-color), var(--accent-color)); }
 
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
-        @keyframes shake { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-10px); } 40%, 80% { transform: translateX(10px); } }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Fredoka', sans-serif;
+            background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--dark-color);
+            overflow-x: hidden;
+        }
+
+        /* --- BACKGROUND ANIMATIONS --- */
+        #bg-elements { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+        .star, .rocket { position: absolute; color: white; opacity: 0.5; }
+        .star { animation: twinkle 3s infinite ease-in-out; }
+        .rocket { font-size: 3rem; animation: fly 15s infinite linear; filter: drop-shadow(0 0 10px rgba(255,255,255,0.5)); }
         
+        @keyframes twinkle { 0%, 100% { opacity: 0.2; transform: scale(1); } 50% { opacity: 1; transform: scale(1.2); } }
+        @keyframes fly { 
+            from { transform: translateY(110vh) translateX(-50px) rotate(-45deg); } 
+            to { transform: translateY(-110px) translateX(110vw) rotate(-45deg); } 
+        }
+
+        .container {
+            width: 95%;
+            max-width: 1100px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            z-index: 10;
+            overflow: hidden;
+            border: 4px solid var(--white);
+        }
+
+        header {
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            color: var(--white);
+            padding: 1.5rem;
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            animation: wobble 7s ease-in-out infinite;
+        }
+        @keyframes wobble { 0%, 100% { transform: rotate(-1deg); } 50% { transform: rotate(1deg); } }
+
+        main { padding: 2rem; min-height: 500px; }
+
+        /* --- GAME UI --- */
+        .status-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+        .score-box { font-size: 2rem; font-weight: 700; color: var(--primary-color); }
+        
+        .progress-container { width: 100%; height: 20px; background: #eee; border-radius: 50px; margin-bottom: 2rem; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--secondary-color), var(--accent-color)); width: 0%; transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+
+        .question-box { text-align: center; margin-bottom: 2.5rem; }
+        .question-text { font-size: 2.5rem; margin-bottom: 1.5rem; color: #333; }
+        .question-img { max-width: 100%; max-height: 300px; border-radius: 15px; border: 5px solid white; box-shadow: var(--shadow); margin-bottom: 15px; }
+
+        .answers-grid { display: grid; gap: 1.5rem; }
+        .answer-card {
+            background: white;
+            border: 5px solid #e0e0e0;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .answer-card:hover { transform: scale(1.05); border-color: var(--primary-color); }
+        .answer-card.correct { border-color: var(--secondary-color); background: #eafff5; animation: pulse 0.6s; }
+        .answer-card.incorrect { border-color: var(--danger-color); background: #ffebee; animation: shake 0.5s; }
+        
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-10px); } 40%, 80% { transform: translateX(10px); } }
+
+        .btn {
+            padding: 1.2rem 2.5rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            color: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: 0.3s;
+        }
+        .btn-start { background: var(--secondary-color); }
+        .btn-start:disabled { background: #999; cursor: wait; }
+
         .confetti-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 999; }
         .confetti { position: absolute; top: -10%; animation: fall 3s linear forwards; }
         @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
     </style>
 </head>
 <body>
+
+    <div id="bg-elements"></div>
+
     <div class="container">
-        <header>🎮 EduQuiz - Time to Play! 🎮</header>
+        <header>🚀 EduQuiz Fun Play! 🚀</header>
         <main>
-            <div id="start-overlay" class="start-overlay">
-                <h3 style="font-size: 2.5rem; color: var(--primary-color); margin-bottom: 1rem;">Sudah Siap?</h3>
-                <p style="margin-bottom: 2rem; font-size: 1.2rem;">Klik tombol di bawah untuk mulai kuis!</p>
-                <button id="btn-start-game" class="btn btn-play" onclick="initGame()" disabled>⏳ LOADING DATA...</button>
+            <div id="start-screen" style="text-align: center; padding: 3rem;">
+                <h1 style="font-size: 3rem; color: var(--primary-color); margin-bottom: 1rem;">Siap Menjelajah?</h1>
+                <p style="font-size: 1.3rem; margin-bottom: 2.5rem;">Ayo kumpulkan bintang dan jadi juara!</p>
+                <button id="start-btn" class="btn btn-start" disabled>MEMUAT DATA...</button>
             </div>
 
-            <div id="game-interface" style="display: none;">
-                <div class="game-header">
-                    <h2 id="question-counter">Question 1 of 0</h2>
-                    <div class="score-display">
-                        <span>⭐</span> <span id="score">0</span>
-                    </div>
+            <div id="game-screen" style="display: none;">
+                <div class="status-header">
+                    <h2 id="q-counter" style="font-size: 1.5rem;">Soal 1 / 5</h2>
+                    <div class="score-box">⭐ <span id="score-text">0</span></div>
                 </div>
-
-                <div class="progress-bar-container">
-                    <div id="progress-bar" class="progress-bar"></div>
-                </div>
-
-                <div id="quiz-container">
-                    <div class="question-container" style="text-align: center; margin-bottom: 2rem;"></div>
-                    <div id="answers-grid" class="answers-grid"></div>
-                </div>
+                <div class="progress-container"><div class="progress-fill" id="progress-bar"></div></div>
+                
+                <div class="question-box" id="question-box"></div>
+                <div class="answers-grid" id="answers-grid"></div>
             </div>
 
-            <div id="results-container" style="display: none; text-align: center; padding: 3rem;">
-                <h2 style="font-size: 3rem; color: var(--primary-color);">🎉 Selesai! 🎉</h2>
-                <p style="font-size: 2rem; margin: 1.5rem 0;">Skor Kamu: <span id="final-score">0</span></p>
-                <div style="display: flex; flex-direction: column; gap: 15px; align-items: center;">
-                    <button class="btn btn-restart" onclick="location.reload()">🚀 Main Lagi</button>
-                    <button class="btn btn-restart" onclick="window.location.href='index.html'" style="background: #6c757d; font-size: 1.2rem;">🏠 Kembali ke Home</button>
-                </div>
+            <div id="result-screen" style="display: none; text-align: center; padding: 2rem;">
+                <h1 style="font-size: 4rem;">🏆</h1>
+                <h2 style="font-size: 2.5rem; color: var(--primary-color); margin: 1rem 0;">Misi Selesai!</h2>
+                <p style="font-size: 2rem;">Skor Akhir: <span id="final-score">0</span></p>
+                <button class="btn btn-start" onclick="location.reload()" style="margin-top: 2rem;">🚀 Main Lagi</button>
             </div>
         </main>
     </div>
 
     <div id="confetti-container" class="confetti-container"></div>
 
-    <script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+        // --- PASTE FIREBASE CONFIG KAMU DI SINI ---
+        const firebaseConfig = {
+            apiKey: "AIzaSy...",
+            authDomain: "eduquiz-ac27a.firebaseapp.com",
+            databaseURL: "https://eduquiz-ac27a-default-rtdb.asia-southeast1.firebasedatabase.app/",
+            projectId: "eduquiz-ac27a",
+            storageBucket: "eduquiz-ac27a.appspot.com",
+            messagingSenderId: "...",
+            appId: "..."
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
         let questions = [];
         let currentIdx = 0;
         let score = 0;
 
-        const correctSound = new Audio('https://www.myinstants.com/media/sounds/ding-sound-effect.mp3');
-        const incorrectSound = new Audio('https://www.myinstants.com/media/sounds/wrong-answer-2.mp3');
+        const ding = new Audio('https://www.myinstants.com/media/sounds/ding-sound-effect.mp3');
+        const wrong = new Audio('https://www.myinstants.com/media/sounds/wrong-answer-2.mp3');
 
-        // --- DATABASE HANDLER ---
-        async function loadQuestions() {
-            const DB_NAME = "EduQuizDB";
-            return new Promise((resolve) => {
-                const request = indexedDB.open(DB_NAME, 1);
-                request.onsuccess = (e) => {
-                    const db = e.target.result;
-                    if (!db.objectStoreNames.contains("questions")) { resolve([]); return; }
-                    const tx = db.transaction("questions", "readonly");
-                    const store = tx.objectStore("questions");
-                    const req = store.getAll();
-                    req.onsuccess = () => resolve(req.result);
-                };
-                request.onerror = () => resolve([]);
-            });
+        // Init Background
+        const bg = document.getElementById('bg-elements');
+        for(let i=0; i<30; i++) {
+            const s = document.createElement('div');
+            s.className = 'star';
+            s.innerText = '⭐';
+            s.style.left = Math.random()*100 + '%';
+            s.style.top = Math.random()*100 + '%';
+            s.style.fontSize = (Math.random()*1 + 0.5) + 'rem';
+            s.style.animationDelay = Math.random()*3 + 's';
+            bg.appendChild(s);
         }
+        const rocket = document.createElement('div');
+        rocket.className = 'rocket'; rocket.innerText = '🚀';
+        bg.appendChild(rocket);
 
-        // --- GAME LOGIC ---
-        window.onload = async () => {
-            questions = await loadQuestions();
-            const btn = document.getElementById('btn-start-game');
-            if (questions.length > 0) {
-                btn.innerText = "▶️ START GAME";
+        // Load Data
+        async function load() {
+            const snap = await get(ref(db, 'questions'));
+            if(snap.exists()) {
+                questions = Object.values(snap.val());
+                const btn = document.getElementById('start-btn');
+                btn.innerText = "▶️ MULAI GAME";
                 btn.disabled = false;
             } else {
-                btn.innerText = "❌ NO DATA";
-                alert("Tidak ada soal di database! Silakan ke Settings dulu.");
+                alert("Database kosong! Isi soal dulu.");
             }
+        }
+        load();
+
+        document.getElementById('start-btn').onclick = () => {
+            document.getElementById('start-screen').style.display = 'none';
+            document.getElementById('game-screen').style.display = 'block';
+            showQ();
         };
 
-        function initGame() {
-            document.getElementById('start-overlay').style.display = 'none';
-            document.getElementById('game-interface').style.display = 'block';
-            startGame();
-        }
-
-        function startGame() {
-            currentIdx = 0;
-            score = 0;
-            displayQuestion();
-        }
-
-        function displayQuestion() {
-            if (currentIdx >= questions.length) {
-                showResults(); return;
-            }
-
+        function showQ() {
+            if(currentIdx >= questions.length) return showResult();
             const q = questions[currentIdx];
-            document.getElementById('question-counter').innerText = `Question ${currentIdx + 1} of ${questions.length}`;
-            document.getElementById('score').innerText = score;
-            document.getElementById('progress-bar').style.width = `${((currentIdx + 1) / questions.length) * 100}%`;
+            
+            document.getElementById('q-counter').innerText = `Soal ${currentIdx + 1} / ${questions.length}`;
+            document.getElementById('progress-bar').style.width = `${(currentIdx/questions.length)*100}%`;
+            document.getElementById('score-text').innerText = score;
 
-            // Render Soal
-            const qContainer = document.querySelector('.question-container');
-            qContainer.innerHTML = `
-                <h1 style="font-size: 2.2rem; margin-bottom: 20px;">${q.qData.text}</h1>
-                ${q.qData.useImg ? `<img src="${q.qData.img}" style="max-width:300px; border-radius:15px; margin-bottom:15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">` : ''}
-                ${q.qData.useAud ? `<div><audio src="${q.qData.aud}" controls autoplay></audio></div>` : ''}
-            `;
+            const qBox = document.getElementById('question-box');
+            qBox.innerHTML = `<h2 class="question-text">${q.qData.text}</h2>`;
+            if(q.qData.useImg) qBox.innerHTML += `<img src="${q.qData.img}" class="question-img">`;
+            if(q.qData.useAud) qBox.innerHTML += `<div><audio src="${q.qData.aud}" controls autoplay></audio></div>`;
 
-            // Render Jawaban
             const grid = document.getElementById('answers-grid');
             grid.innerHTML = '';
             grid.style.gridTemplateColumns = `repeat(${q.answers.length > 2 ? 2 : 1}, 1fr)`;
@@ -164,60 +231,49 @@
                 const card = document.createElement('div');
                 card.className = 'answer-card';
                 card.innerHTML = `
-                    ${ans.useImg ? `<img src="${ans.img}" style="width:100%; height:160px; object-fit:cover; border-radius:10px; margin-bottom:10px;">` : ''}
-                    <p style="font-size: 1.4rem; font-weight: bold;">${ans.text}</p>
-                    ${ans.useAud ? `<button onclick="event.stopPropagation(); new Audio('${ans.aud}').play()" style="margin-top:10px; cursor:pointer; padding:5px 15px; border-radius:20px; border:none; background:var(--primary-color); color:white; font-family:inherit;">🔊 Dengar</button>` : ''}
-                    <div class="answer-label">${String.fromCharCode(65 + i)}</div>
+                    <div style="position:absolute; top:10px; left:10px; background:#333; color:white; width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center;">${String.fromCharCode(65+i)}</div>
+                    ${ans.useImg ? `<img src="${ans.img}" style="width:100%; height:140px; object-fit:cover; border-radius:10px; margin-bottom:10px;">` : ''}
+                    <p style="font-size:1.5rem; font-weight:600;">${ans.text}</p>
+                    ${ans.useAud ? `<button onclick="event.stopPropagation(); new Audio('${ans.aud}').play()" style="margin-top:10px; border:none; background:var(--primary-color); color:white; padding:5px 15px; border-radius:20px; cursor:pointer;">🔊 Dengar</button>` : ''}
                 `;
-                card.onclick = () => checkAnswer(i);
+                card.onclick = () => check(i, card);
                 grid.appendChild(card);
             });
         }
 
-        function checkAnswer(selectedIdx) {
+        function check(idx, el) {
             const q = questions[currentIdx];
-            const cards = document.querySelectorAll('.answer-card');
-            cards.forEach(c => c.style.pointerEvents = 'none'); // Matikan klik
-
-            const isCorrect = q.answers[selectedIdx].isCorrect;
+            document.querySelectorAll('.answer-card').forEach(c => c.style.pointerEvents = 'none');
             
-            if (isCorrect) {
-                score++;
-                cards[selectedIdx].classList.add('correct');
-                correctSound.play();
+            if(q.answers[idx].isCorrect) {
+                el.classList.add('correct'); score++; ding.play();
             } else {
-                cards[selectedIdx].classList.add('incorrect');
-                // Tunjukkan jawaban yang benar
+                el.classList.add('incorrect'); wrong.play();
                 const correctIdx = q.answers.findIndex(a => a.isCorrect);
-                cards[correctIdx].classList.add('correct');
-                incorrectSound.play();
+                document.querySelectorAll('.answer-card')[correctIdx].classList.add('correct');
             }
 
-            setTimeout(() => {
-                currentIdx++;
-                displayQuestion();
-            }, 2000);
+            setTimeout(() => { currentIdx++; showQ(); }, 2500);
         }
 
-        function showResults() {
-            document.getElementById('game-interface').style.display = 'none';
-            document.getElementById('results-container').style.display = 'block';
+        function showResult() {
+            document.getElementById('game-screen').style.display = 'none';
+            document.getElementById('result-screen').style.display = 'block';
             document.getElementById('final-score').innerText = `${score} / ${questions.length}`;
-            if (score === questions.length) launchConfetti();
+            if(score === questions.length) launchConfetti();
         }
 
         function launchConfetti() {
-            const container = document.getElementById('confetti-container');
-            const emojis = ['🎉', '✨', '🌟', '🏆', '🔥'];
-            for (let i = 0; i < 50; i++) {
+            const cont = document.getElementById('confetti-container');
+            const emj = ['🎉', '✨', '🌟', '🏆', '🌈'];
+            for(let i=0; i<60; i++){
                 const c = document.createElement('div');
                 c.className = 'confetti';
-                c.innerText = emojis[Math.floor(Math.random() * emojis.length)];
-                c.style.left = Math.random() * 100 + '%';
-                c.style.fontSize = (Math.random() * 2 + 1) + 'rem';
-                c.style.animationDuration = (Math.random() * 2 + 1) + 's';
-                c.style.animationDelay = Math.random() + 's';
-                container.appendChild(c);
+                c.innerText = emj[Math.floor(Math.random()*emj.length)];
+                c.style.left = Math.random()*100 + '%';
+                c.style.fontSize = (Math.random()*2 + 1) + 'rem';
+                c.style.animationDuration = (Math.random()*3 + 2) + 's';
+                cont.appendChild(c);
             }
         }
     </script>

@@ -9,22 +9,18 @@
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #0D6EFD; /* Bright Blue */
-            --secondary-color: #198754; /* Happy Green */
-            --accent-color: #FFC107; /* Sunny Yellow */
-            --danger-color: #DC3545; /* Clear Red */
-            --dark-color: #212529; /* Dark Blue */
-            --light-color: #F8F9FA; /* Warm Light Gray */
+            --primary-color: #0D6EFD;
+            --secondary-color: #198754;
+            --accent-color: #FFC107;
+            --danger-color: #DC3545;
+            --dark-color: #212529;
+            --light-color: #F8F9FA;
             --white: #ffffff;
             --shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
             --border-radius: 20px;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             font-family: 'Fredoka', sans-serif;
@@ -37,25 +33,10 @@
             overflow: hidden;
         }
 
-        /* Animated Background */
-        #stars-container, #clouds-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-        }
-        .star, .cloud, .rocket {
-            position: absolute;
-            font-size: 2rem;
-            animation: twinkle 3s infinite ease-in-out;
-        }
-        .cloud { font-size: 3rem; opacity: 0.5; animation: drift 25s infinite linear; }
-        .rocket { font-size: 2.5rem; animation: fly 15s infinite linear; }
+        /* Animated Background Elements */
+        #bg-elements { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
+        .star { position: absolute; color: white; animation: twinkle 3s infinite ease-in-out; }
         @keyframes twinkle { 0%, 100% { opacity: 0.2; transform: scale(1); } 50% { opacity: 1; transform: scale(1.2); } }
-        @keyframes drift { from { transform: translateX(-100px); } to { transform: translateX(calc(100vw + 100px)); } }
-        @keyframes fly { from { transform: translateY(100vh) translateX(-50px) rotate(-45deg); } to { transform: translateY(-100px) translateX(100vw) rotate(-45deg); } }
 
         .container {
             width: 90%;
@@ -81,10 +62,7 @@
         }
         @keyframes wobble { 0%, 100% { transform: rotate(-2deg); } 50% { transform: rotate(2deg); } }
 
-        main {
-            padding: 3rem;
-            text-align: center;
-        }
+        main { padding: 3rem; text-align: center; }
 
         .home-buttons {
             display: flex;
@@ -111,79 +89,107 @@
             margin: 0 auto;
             width: 80%;
             max-width: 400px;
+            font-family: 'Fredoka', sans-serif;
+            text-decoration: none;
         }
         .btn:disabled {
-            background-color: #ccc;
+            background: #ccc !important;
             cursor: not-allowed;
-            transform: none;
+            transform: none !important;
             box-shadow: none;
         }
         .btn-play { background: linear-gradient(45deg, var(--secondary-color), #20c997); }
-        .btn-play:not(:disabled):hover { transform: scale(1.1) rotate(3deg); box-shadow: 0 6px 20px rgba(25, 135, 84, 0.4); }
+        .btn-play:not(:disabled):hover { transform: scale(1.1) rotate(3deg); }
         .btn-settings { background: linear-gradient(45deg, var(--accent-color), #fd7e14); }
-        .btn-settings:hover { transform: scale(1.1) rotate(-3deg); box-shadow: 0 6px 20px rgba(255, 193, 7, 0.4); }
+        .btn-settings:hover { transform: scale(1.1) rotate(-3deg); }
 
         .home-status {
             margin-top: 2rem;
-            font-size: 1.2rem;
-            color: var(--danger-color);
+            font-size: 1.3rem;
+            font-weight: 500;
             min-height: 30px;
-            animation: fadeIn 1s;
+            transition: 0.3s;
         }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
     </style>
 </head>
 <body>
 
-    <div id="stars-container"></div>
-    <div id="clouds-container"></div>
+    <div id="bg-elements"></div>
 
     <div class="container">
-        <header>🚀 EduQuiz - The Fun Classroom Game 🚀</header>
+        <header>🚀 EduQuiz Fun Game 🚀</header>
         <main>
             <div class="home-buttons">
-                <button id="play-quiz-btn" class="btn btn-play" onclick="navigateTo('playquiz.html')">
+                <button id="play-quiz-btn" class="btn btn-play" onclick="location.href='playquiz.html'" disabled>
                     <span>🏁</span> Play Quiz
                 </button>
-                <button class="btn btn-settings" onclick="navigateTo('quizsettings.html')">
+                <button class="btn btn-settings" onclick="location.href='quizsettings.html'">
                     <span>⚙️</span> Quiz Settings
                 </button>
             </div>
-            <p id="home-status" class="home-status"></p>
+            <p id="home-status" class="home-status">🔄 Menghubungkan ke Cloud...</p>
         </main>
     </div>
 
-    <script src="dummy-data.js"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-<script>
-    const playQuizBtn = document.getElementById('play-quiz-btn');
-    const homeStatus = document.getElementById('home-status');
-    // ... (kode animasi background biarkan saja) ...
-    function generateBackgroundElements() { /* ... kode lama ... */ }
+        // --- PASTE KONFIGURASI FIREBASE KAMU DI SINI ---
+        const firebaseConfig = {
+            apiKey: "AIzaSy...",
+            authDomain: "eduquiz-ac27a.firebaseapp.com",
+            databaseURL: "https://eduquiz-ac27a-default-rtdb.asia-southeast1.firebasedatabase.app/",
+            projectId: "eduquiz-ac27a",
+            storageBucket: "eduquiz-ac27a.appspot.com",
+            messagingSenderId: "...",
+            appId: "..."
+        };
 
-    function updateHomeScreen() {
-    const questions = JSON.parse(localStorage.getItem('eduQuizQuestions') || '[]');
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
 
-    if (questions.length === 0) {
-        playQuizBtn.disabled = true;
-        homeStatus.textContent = "⚠️ Belum ada soal. Silakan buat soal di Quiz Settings.";
-        homeStatus.style.color = "var(--danger-color)";
-    } else {
-        playQuizBtn.disabled = false;
-        homeStatus.textContent = `✅ Siap main! Ada ${questions.length} soal tersedia.`;
-        homeStatus.style.color = "var(--secondary-color)";
-    }
-}
+        const playBtn = document.getElementById('play-quiz-btn');
+        const statusText = document.getElementById('home-status');
 
-    function navigateTo(page) {
-        window.location.href = page;
-    }
+        // Fungsi Sync Otomatis dengan Firebase
+        function syncCloudData() {
+            const qRef = ref(db, 'questions');
 
-    document.addEventListener('DOMContentLoaded', () => {
-        // generateBackgroundElements(); // uncomment jika ada fungsinya
-        updateHomeScreen();
-    });
-</script>
+            onValue(qRef, (snapshot) => {
+                const data = snapshot.val();
+                
+                if (!data) {
+                    playBtn.disabled = true;
+                    statusText.textContent = "⚠️ Cloud Kosong. Silakan buat soal di Settings.";
+                    statusText.style.color = "#DC3545"; // Merah
+                } else {
+                    // Hitung jumlah soal dari Cloud
+                    const count = Object.keys(data).length;
+                    playBtn.disabled = false;
+                    statusText.textContent = `✅ Siap! Ada ${count} soal di Cloud tersedia.`;
+                    statusText.style.color = "#198754"; // Hijau
+                }
+            }, (error) => {
+                statusText.textContent = "❌ Error: Gagal koneksi ke Firebase.";
+                console.error(error);
+            });
+        }
+
+        // Jalankan sinkronisasi
+        syncCloudData();
+
+        // Tambah animasi bintang
+        const bg = document.getElementById('bg-elements');
+        for(let i=0; i<20; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.innerText = '⭐';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.animationDelay = Math.random() * 3 + 's';
+            bg.appendChild(star);
+        }
+    </script>
 </body>
 </html>
